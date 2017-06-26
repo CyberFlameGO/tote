@@ -61,8 +61,8 @@ export default class NotesNav extends Component {
     return (
       <nav className="notes-nav">
         <div className="notes-nav__buttons">
-          <input placeholder="Search..." onChange={e => this.setState({ search: e.target.value })} className="notes-nav__search" type="text" />
-          <Link className="notes-nav__buttons__new" to={`/${newKey}`}>New</Link>
+          <input placeholder="Search..." value={search} onChange={e => this.setState({ search: e.target.value })} className="notes-nav__search" type="text" />
+          <Link onClick={() => this.setState({ search: '' })} className="notes-nav__buttons__new" to={`/${newKey}`}>New</Link>
         </div>
         <ul className="notes-nav__list">
           {filteredNotes.map(noteId => {

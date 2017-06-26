@@ -3,7 +3,19 @@
     "users": {
       "$uid": {
         ".read": "$uid === auth.uid",
-        ".write": "$uid === auth.uid"
+        ".write": "$uid === auth.uid",
+        "notes": {
+          "$noteId": {
+						".validate": "$noteId.beginsWith('-') && newData.hasChildren(['text', 'lastModified'])",
+            "text": {
+              ".validate": "newData.isString()"
+            },
+            "lastModified": {
+              ".validate": "newData.isNumber()"
+            },
+            ".write": false
+          }
+        }
       }
     }
   }

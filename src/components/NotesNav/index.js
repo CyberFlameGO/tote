@@ -42,13 +42,13 @@ export default class NotesNav extends Component {
   static propTypes = {
     notes: PropTypes.object,
     uid: PropTypes.string.isRequired,
+    search: PropTypes.string.isRequired,
+    updateSearch: PropTypes.func.isRequired,
   }
-
-  state = { search: '' }
 
   render() {
     const { uid, notes } = this.props;
-    const { search } = this.state;
+    const { search, updateSearch } = this.props;
     // const noteKeys = sort(Object.keys(notes || {}), notes, 'lastModified');
 
     const noteKeys = Object.keys(notes || {});
@@ -62,7 +62,7 @@ export default class NotesNav extends Component {
     return (
       <nav className="notes-nav">
         <div className="notes-nav__buttons">
-          <input placeholder="Search..." value={search} onChange={e => this.setState({ search: e.target.value })} className="notes-nav__search" type="text" />
+          <input placeholder="Search..." value={search} onChange={e => updateSearch(e.target.value)} className="notes-nav__search" type="text" />
           <Link title="New Note" onClick={() => this.setState({ search: '' })} className="notes-nav__buttons__new" to={`/${newKey}`}><Icon icon="pencil" /></Link>
         </div>
         <ul className="notes-nav__list">

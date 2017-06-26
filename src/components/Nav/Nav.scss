@@ -1,0 +1,43 @@
+.nav {
+    width: 200px;
+    padding-top: 4em;
+
+    &__tagTree {
+        color: $gray-300;
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+
+        &.is-nested {
+            padding-left: 1em;
+        }
+    }
+
+    &__tag {
+        .nav__tag__label {
+            position: relative;
+            display: block;
+            box-sizing: border-box;
+            width: calc(100% + 2em);
+            margin-left: -2em;
+            font-weight: 300;
+            padding: 0.4em 0.6em 0.4em 5em;
+
+            &::before {
+                content: '#';
+                position: absolute;
+                top: 0.5em;
+                left: 3.5em;
+                color: $gray-600;
+            }
+
+            &:hover {
+                color: $gray-000;
+                background-color: $red;
+
+                &::before { color: $gray-000; }
+            }
+        }
+
+    }
+}

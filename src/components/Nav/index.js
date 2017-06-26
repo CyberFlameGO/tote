@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { func } from 'prop-types';
 import types from '../../utils/types';
+import './Nav.scss';
 
 export default class Nav extends Component {
   static propTypes = {
     notes: types.notes.isRequired,
+    updateSearch: func.isRequired,
     logout: func.isRequired,
   }
 
@@ -12,6 +14,7 @@ export default class Nav extends Component {
     super(props);
     this.reduceTagsToTree = this.reduceTagsToTree.bind(this);
     this.renderTags = this.renderTags.bind(this);
+    this.search = this.search.bind(this);
   }
 
   reduceTagsToTree(prev, curr) {
@@ -43,10 +46,11 @@ export default class Nav extends Component {
   renderTags(tagTree) {
     const topLevelTags = Object.keys(tagTree);
     return topLevelTags.map(tag => {
-      if (typeof tagTree[tag] === 'string') return <li className="nav__tag" key={tag}>{tag.startsWith('#') ? tag.substr(1) : tag}</li>;
+      const tagStr = <span className="nav__tag__label">{tag.startsWith('#') ? tag.substr(1) : tag}</span>;
+      if (typeof tagTree[tag] === 'string') return <li className="nav__tag" key={tag} onClick={(e) => this.search(e, tag)}>{tagStr}</li>;
       return (
-        <li key={tag} className="nav__tag has-children">
-          {tag}
+        <li key={tag} className="nav__tag has-children" onClick={(e) => this.search(e, tag)}>
+          {tagStr}
           <ul className="nav__tagTree is-nested">
             {this.renderTags(tagTree[tag])}
           </ul>
@@ -55,15 +59,18 @@ export default class Nav extends Component {
     });
   }
 
+  search(e, tag) {
+    e.stopPropagation();
+    this.props.updateSearch(tag);
+  }
+
   render() {
     const { notes } = this.props;
     const tags = this.flattenTags(notes);
     const tagTree = tags.reduce(this.reduceTagsToTree, {});
-    console.log(tagTree);
 
     return (
       <nav className="nav">
-        <h1>Welcome to the Nav component!</h1>
         <ul className="nav__tagTree">
           {this.renderTags(tagTree)}
         </ul>

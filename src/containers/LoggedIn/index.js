@@ -14,7 +14,12 @@ export default class LoggedIn extends Component {
     logout: PropTypes.func.isRequired,
   }
 
-  state = { notes: {} }
+  constructor(props) {
+    super(props);
+    this.search = this.search.bind(this);
+  }
+
+  state = { notes: {}, search: '' }
 
   componentDidMount() {
     const { uid } = this.props.user;
@@ -24,13 +29,19 @@ export default class LoggedIn extends Component {
     });
   }
 
+  search(search) {
+    this.setState({ search });
+  }
+
   render() {
     const { user, online } = this.props;
+    const { search } = this.state;
+
     return (
       <Router>
         <main className="main">
-          <Nav notes={this.state.notes} logout={this.props.logout} />
-          <NotesNav uid={user.uid} notes={this.state.notes} />
+          <Nav notes={this.state.notes} logout={this.props.logout} updateSearch={this.search} />
+          <NotesNav uid={user.uid} notes={this.state.notes} updateSearch={this.search} search={search} />
 
           <Route exact path="/:noteId?" render={(p) => <Note online={online} user={user} {...p} />} />
         </main>

@@ -70,7 +70,7 @@ export default class Note extends Component {
 
     return (
       <div className="note">
-        {online && <div className="note__offline"><Icon icon="warning" />You are offline! Your changes will saved when you reconnect.</div>}
+        {!online && <div className="note__offline"><Icon icon="warning" />You are offline! Your changes will saved when you reconnect.</div>}
         <div className="note__editor">
           {loading ? <span className="note__editor__loading">Loading...</span> :
             <Editor

@@ -43,20 +43,29 @@ export default class NotesNav extends Component {
     uid: PropTypes.string.isRequired,
   }
 
+  state = { search: '' }
+
   render() {
     const { uid, notes } = this.props;
+    const { search } = this.state;
     // const noteKeys = sort(Object.keys(notes || {}), notes, 'lastModified');
+
     const noteKeys = Object.keys(notes || {});
     const newKey = firebase.database().ref(`/users/${uid}/notes/`).push().key;
+
+    const filteredNotes = search === '' ? noteKeys : noteKeys.filter(noteKey => {
+      const re = new RegExp(search, 'i');
+      return notes[noteKey].text.search(re) !== -1;
+    });
 
     return (
       <nav className="notes-nav">
         <div className="notes-nav__buttons">
-          <input placeholder="Search..." className="notes-nav__search" type="text" />
+          <input placeholder="Search..." onChange={e => this.setState({ search: e.target.value })} className="notes-nav__search" type="text" />
           <Link className="notes-nav__buttons__new" to={`/${newKey}`}>New</Link>
         </div>
         <ul className="notes-nav__list">
-          {noteKeys.map(noteId => {
+          {filteredNotes.map(noteId => {
             return (
               <li className="notes-nav__list-item" key={noteId}>
                 <NavLink activeClassName="is-active" className="notes-nav__link" to={`/${noteId}`} dangerouslySetInnerHTML={{ __html: markdown.toHTML(notes[noteId].text) }} />

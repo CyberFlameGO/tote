@@ -1,0 +1,15 @@
+@import '~prismjs/themes/prism.css';
+
+html, body, #root, .main {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: $body-font;
+  font-size: $body-font-size;
+  line-height: $body-line-height;
+}
+
+code { font-family: $mono-font; }

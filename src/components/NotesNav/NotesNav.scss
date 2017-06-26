@@ -3,6 +3,7 @@
     height: 100%;
     background-color: $gray-000;
     overflow-y: auto;
+    border-right: 1px solid $gray-300;
 
     @include media($on-mobile) {
         height: auto;

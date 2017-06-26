@@ -9,7 +9,7 @@ function findWithRegex(regex, contentBlock, callback) {
   }
 }
 
-const regs = {
+export const regs = {
   BOLD: /\*\*.+\*\*/g,
   EM: /\*(?!\*).+?\*/g,
   DEL: /~.*~+/g,

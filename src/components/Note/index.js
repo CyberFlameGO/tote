@@ -3,7 +3,7 @@ import { shape, string, bool } from 'prop-types';
 import types from '../../utils/types';
 import Editor from '../Editor';
 import firebase from 'firebase';
-import { saveNote } from '../Editor/utils';
+import saveNote from '../Editor/saveNote';
 import Icon from '../../utils/icons';
 import './Note.scss';
 

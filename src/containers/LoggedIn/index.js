@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Note from '../../components/Note';  
 import NotesNav from '../../components/NotesNav';  
+import Nav from '../../components/Nav';  
 import types from '../../utils/types';
 import firebase from 'firebase';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
@@ -28,9 +29,7 @@ export default class LoggedIn extends Component {
     return (
       <Router>
         <main className="main">
-          <nav className="nav">
-            <button onClick={this.props.logout}>LOGOUT</button>
-          </nav>
+          <Nav notes={this.state.notes} logout={this.props.logout} />
           <NotesNav uid={user.uid} notes={this.state.notes} />
 
           <Route exact path="/:noteId?" render={(p) => <Note online={online} user={user} {...p} />} />

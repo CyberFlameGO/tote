@@ -4,6 +4,11 @@
     background-color: $gray-000;
     overflow-y: auto;
 
+    @include media($on-mobile) {
+        height: auto;
+        width: 100%;
+    }
+
     &__search {
         flex: 2;
         padding: 0.4em 0.4em 0.4em 0.6em;

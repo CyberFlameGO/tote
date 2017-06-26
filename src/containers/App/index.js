@@ -35,17 +35,19 @@ class App extends Component {
   }
 
   login() {
-    firebase.auth().signInWithPopup(provider).then((result) => {
-      const user = result.user;
-      this.setState({
-        loggedIn: true,
-        user,
-      });
-    }).catch((error) => {
-      this.setState({
-        loggedIn: false,
+    firebase.auth().signInWithRedirect(provider)
+      .then((result) => {
+        const user = result.user;
+        this.setState({
+          loggedIn: true,
+          user,
+        });
       })
-    });
+      .catch((error) => {
+        this.setState({
+          loggedIn: false,
+        })
+      });
   }
 
   logout() {

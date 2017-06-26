@@ -7,23 +7,6 @@ import * as comps from './comps';
 import MultiDecorator from 'draft-js-multidecorators';
 import prismjs from './prism';
 
-const compositeDecorator = new MultiDecorator([
-  prismjs,
-  new CompositeDecorator([
-    { strategy: strats.code, component: comps.code },
-    { strategy: strats.strong, component: comps.strong },
-    { strategy: strats.del, component: comps.del },
-    { strategy: strats.em, component: comps.em },
-    { strategy: strats.tag, component: comps.tag },
-    { strategy: strats.h6, component: comps.h6 },
-    { strategy: strats.h5, component: comps.h5 },
-    { strategy: strats.h4, component: comps.h4 },
-    { strategy: strats.h3, component: comps.h3 },
-    { strategy: strats.h2, component: comps.h2 },
-    { strategy: strats.h1, component: comps.h1 },
-  ]),
-]);
-
 export default class Editor extends Component {
   static propTypes = {
     user: types.user.isRequired,
@@ -34,8 +17,26 @@ export default class Editor extends Component {
   constructor(props) {
     super(props);
     this.onChange = this.onChange.bind(this);
+
+    this.compositeDecorator = new MultiDecorator([
+      prismjs,
+      new CompositeDecorator([
+        { strategy: strats.code, component: comps.code },
+        { strategy: strats.strong, component: comps.strong },
+        { strategy: strats.del, component: comps.del },
+        { strategy: strats.em, component: comps.em },
+        { strategy: strats.tag, component: comps.tag, props: { onClick: props.updateSearch } },
+        { strategy: strats.h6, component: comps.h6 },
+        { strategy: strats.h5, component: comps.h5 },
+        { strategy: strats.h4, component: comps.h4 },
+        { strategy: strats.h3, component: comps.h3 },
+        { strategy: strats.h2, component: comps.h2 },
+        { strategy: strats.h1, component: comps.h1 },
+      ]),
+    ]);
+
     const contentState = ContentState.createFromText(props.text || '');
-    const editorState = EditorState.createWithContent(contentState, compositeDecorator);
+    const editorState = EditorState.createWithContent(contentState, this.compositeDecorator);
 
     this.state = { editorState };
   }
@@ -43,7 +44,7 @@ export default class Editor extends Component {
   componentWillReceiveProps(newProps) {
     if (newProps.noteId !== this.props.noteId) {
       const contentState = ContentState.createFromText(newProps.text || '');
-      const editorState = EditorState.createWithContent(contentState, compositeDecorator);
+      const editorState = EditorState.createWithContent(contentState, this.compositeDecorator);
 
       this.setState({ editorState });
     }

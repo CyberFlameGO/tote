@@ -43,16 +43,19 @@ export default class Nav extends Component {
     return Array.from(tagSet);
   }
 
-  renderTags(tagTree) {
+  renderTags(tagTree, parentTag) {
     const topLevelTags = Object.keys(tagTree);
     return topLevelTags.map(tag => {
       const tagStr = <span className="nav__tag__label">{tag.startsWith('#') ? tag.substr(1) : tag}</span>;
-      if (typeof tagTree[tag] === 'string') return <li className="nav__tag" key={tag} onClick={(e) => this.search(e, tag)}>{tagStr}</li>;
+      if (typeof tagTree[tag] === 'string') {
+        const searchTag = parentTag ? `${parentTag}/${tag}` : tag;
+        return <li className="nav__tag" key={tag} onClick={(e) => this.search(e, searchTag)}>{tagStr}</li>;
+      }
       return (
         <li key={tag} className="nav__tag has-children" onClick={(e) => this.search(e, tag)}>
           {tagStr}
           <ul className="nav__tagTree is-nested">
-            {this.renderTags(tagTree[tag])}
+            {this.renderTags(tagTree[tag], tag)}
           </ul>
         </li>
       )

@@ -1,7 +1,7 @@
 import React from 'react';
 
-function wrap(props, comp) {
-  return {
+function wrap(props, comp, type) {
+  const ret = {
     ...comp,
     props: {
       ...comp.props,
@@ -9,13 +9,17 @@ function wrap(props, comp) {
       children: props.children,
     },
   };
+
+  if (type && type === 'tag') ret.props.onClick = () => props.onClick(props.decoratedText);
+
+  return ret;
 }
 
 export const code = p => wrap(p, <code />);
 export const em = p => wrap(p, <em />);
 export const strong = p => wrap(p, <strong />);
 export const del = p => wrap(p, <del />);
-export const tag = p => wrap(p, <span className="tag" spellCheck={false} />);
+export const tag = p => wrap(p, <span className="tag" spellCheck={false} />, 'tag');
 
 /* eslint-disable jsx-a11y/heading-has-content */
 export const h1 = p => wrap(p, <h1 />);

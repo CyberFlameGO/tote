@@ -43,7 +43,7 @@ export default class LoggedIn extends Component {
           <Nav notes={this.state.notes} logout={this.props.logout} updateSearch={this.search} />
           <NotesNav uid={user.uid} notes={this.state.notes} updateSearch={this.search} search={search} />
 
-          <Route exact path="/:noteId?" render={(p) => <Note online={online} user={user} {...p} />} />
+          <Route exact path="/:noteId?" render={(p) => <Note online={online} updateSearch={this.search} user={user} {...p} />} />
         </main>
       </Router>
     );

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { shape, string, bool } from 'prop-types';
+import { shape, func, string, bool } from 'prop-types';
 import types from '../../utils/types';
 import Editor from '../Editor';
 import firebase from 'firebase';
@@ -25,6 +25,7 @@ export default class Note extends Component {
     match: shape({ params: shape({ noteId: string }) }),
     user: types.user.isRequired,
     online: bool.isRequired,
+    updateSearch: func.isRequired,
   }
 
   constructor(props) {
@@ -65,7 +66,7 @@ export default class Note extends Component {
 
   render() {
     const { loading, text } = this.state;
-    const { user, match, online } = this.props;
+    const { user, match, online, updateSearch } = this.props;
     const { noteId } = match.params;
 
     return (
@@ -74,6 +75,7 @@ export default class Note extends Component {
         <div className="note__editor">
           {loading ? <span className="note__editor__loading">Loading...</span> :
             <Editor
+              updateSearch={updateSearch}
               ref={(r) => { this.editor = r; }}
               save={this.save}
               user={user}

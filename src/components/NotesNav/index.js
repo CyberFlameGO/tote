@@ -63,14 +63,22 @@ export default class NotesNav extends Component {
       <nav className="notes-nav">
         <div className="notes-nav__buttons">
           <input placeholder="Search..." value={search} onChange={e => updateSearch(e.target.value)} className="notes-nav__search" type="text" />
-          <Link title="New Note" onClick={() => this.setState({ search: '' })} className="notes-nav__buttons__new" to={`/${newKey}`}><Icon icon="pencil" /></Link>
+          <Link title="New Note" onClick={() => updateSearch('')} className="notes-nav__buttons__new" to={`/${newKey}`}><Icon icon="pencil" /></Link>
         </div>
         <ul className="notes-nav__list">
           {filteredNotes.map(noteId => {
+            const { lastModified, text } = notes[noteId];
             return (
               <li className="notes-nav__list-item" key={noteId}>
-                <NavLink activeClassName="is-active" className="notes-nav__link" to={`/${noteId}`} dangerouslySetInnerHTML={{ __html: markdown.toHTML(notes[noteId].text) }} />
-                <span className="notes-nav__time">{timeSince(notes[noteId].lastModified)}</span>
+                <NavLink
+                  activeClassName="is-active"
+                  className="notes-nav__link"
+                  to={`/${noteId}`}
+                  dangerouslySetInnerHTML={{
+                    __html: text !== '' ? markdown.toHTML(text) : markdown.toHTML('# A blank new note!'),
+                  }}
+                />
+                <span className="notes-nav__time">{timeSince(lastModified)}</span>
               </li>
             );
           })}

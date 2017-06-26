@@ -211,7 +211,9 @@ module.exports = {
                   loader: 'sass-loader',
                   options: {
                     sourceMap: true,
+                    data: '@import "tools";',
                     includePaths: [
+                      path.resolve(__dirname, '..', 'src', 'scss', 'tools'),
                       path.resolve(__dirname, '..', 'node_modules'),
                     ],
                   },

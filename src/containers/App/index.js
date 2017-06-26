@@ -10,11 +10,13 @@ export default class App extends Component {
     super(props);
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
+    this.detectConnection = this.detectConnection.bind(this);
   }
 
   state = {
     loading: true,
     loggedIn: false,
+    online: true,
   }
 
   componentDidMount() {
@@ -33,6 +35,21 @@ export default class App extends Component {
         });
       }
     });
+
+    this.detectConnection();
+  }
+
+  detectConnection() {
+    const connectedRef = firebase.database().ref('.info/connected');
+    connectedRef.on('value', (snap) => {
+      if (snap.val() === true) {
+        if (!this.state.online) console.info('Now connected! 🎉');
+        this.setState({ online: true });
+      } else {
+        console.info('Disconnected. 😭')
+        this.setState({ online: false });
+      }
+    });
   }
 
   login() {
@@ -42,6 +59,7 @@ export default class App extends Component {
           user: result.user,
         });
       }).catch((error) => {
+        console.error(error);
         this.setState({
           loggedIn: false,
         })
@@ -55,11 +73,10 @@ export default class App extends Component {
   }
 
   render() {
-    const { loading, loggedIn, user } = this.state;
+    const { loading, loggedIn, user, online } = this.state;
 
     if (loading) return null;
-    if (loggedIn && user) return <LoggedIn user={user} logout={this.logout} />;
-
-    return <LoggedOut login={this.login} />;
+    if (loggedIn && user) return <LoggedIn online={online} user={user} logout={this.logout} />;
+    return <LoggedOut online={online} login={this.login} />;
   }
 }

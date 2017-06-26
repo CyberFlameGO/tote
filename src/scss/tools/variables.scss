@@ -9,7 +9,9 @@ $gray-700:        #444d56 !default;
 $gray-800:        #2f363d !default;
 $gray-900:        #24292e !default;
 
-$red: #DD4C4F !default;
+$red:             #DD4C4F !default;
+$red-dark:        darken(#DD4C4F, 10%) !default;
+
 $blue-000:        #f1f8ff !default;
 $blue-100:        #dbedff !default;
 $blue-200:        #c8e1ff !default;

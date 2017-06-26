@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { shape, string } from 'prop-types';
+import { shape, string, bool } from 'prop-types';
 import types from '../../utils/types';
 import Editor from '../Editor';
 import firebase from 'firebase';
 import { saveNote } from '../Editor/utils';
+import Icon from '../../utils/icons';
 import './Note.scss';
 
 const update = (that, uid, noteId) => {
@@ -23,6 +24,7 @@ export default class Note extends Component {
   static propTypes = {
     match: shape({ params: shape({ noteId: string }) }),
     user: types.user.isRequired,
+    online: bool.isRequired,
   }
 
   constructor(props) {
@@ -63,11 +65,12 @@ export default class Note extends Component {
 
   render() {
     const { loading, text } = this.state;
-    const { user, match } = this.props;
+    const { user, match, online } = this.props;
     const { noteId } = match.params;
 
     return (
       <div className="note">
+        {online && <div className="note__offline"><Icon icon="warning" />You are offline! Your changes will saved when you reconnect.</div>}
         <div className="note__editor">
           {loading ? <span className="note__editor__loading">Loading...</span> :
             <Editor

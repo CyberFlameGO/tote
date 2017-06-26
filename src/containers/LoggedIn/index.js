@@ -24,7 +24,7 @@ export default class LoggedIn extends Component {
   }
 
   render() {
-    const { user } = this.props;
+    const { user, online } = this.props;
     return (
       <Router>
         <main className="main">
@@ -33,7 +33,7 @@ export default class LoggedIn extends Component {
           </nav>
           <NotesNav uid={user.uid} notes={this.state.notes} />
 
-          <Route exact path="/:noteId?" render={(p) => <Note user={user} {...p} />} />
+          <Route exact path="/:noteId?" render={(p) => <Note online={online} user={user} {...p} />} />
         </main>
       </Router>
     );

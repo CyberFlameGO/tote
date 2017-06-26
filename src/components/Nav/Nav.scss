@@ -1,4 +1,5 @@
 .nav {
+    position: relative;
     width: 200px;
     padding-top: 4em;
 
@@ -11,6 +12,22 @@
         &.is-nested {
             padding-left: 1em;
         }
+    }
+
+    &__logout {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 1em 0;
+        background: none;
+        border: none;
+        border-top: 1px solid $gray-600;
+        color: $gray-400;
+        font-family: inherit;
     }
 
     &__tag {

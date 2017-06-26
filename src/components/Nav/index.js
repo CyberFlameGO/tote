@@ -77,7 +77,7 @@ export default class Nav extends Component {
         <ul className="nav__tagTree">
           {this.renderTags(tagTree)}
         </ul>
-        <button onClick={this.props.logout}>LOGOUT</button>
+        <button className="nav__logout" onClick={this.props.logout}>Logout</button>
       </nav>
     );
   }

@@ -36,6 +36,7 @@ export default class Note extends Component {
     const { user, match } = this.props;
     const { noteId } = match.params;
     update(this, user.uid, noteId);
+    this.focus();
   }
 
   componentWillReceiveProps(newProps) {
@@ -44,6 +45,9 @@ export default class Note extends Component {
     if (noteId && noteId !== match.params.noteId) {
       this.setState({ loading: true }, () => {
         update(this, user.uid, noteId);
+        setTimeout(() => {
+          this.focus();
+        }, 100);
       });
     }
   }
@@ -54,7 +58,7 @@ export default class Note extends Component {
   }
 
   focus() {
-    this.editor.editor.focus();
+    if (this.editor && this.editor.editor) this.editor.editor.focus();
   }
 
   render() {

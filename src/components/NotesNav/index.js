@@ -5,6 +5,7 @@ import firebase from 'firebase';
 import { markdown } from 'markdown';
 import './NotesNav.scss';
 
+// eslint-disable-next-line no-unused-vars
 function sort(arr, obj, sortBy) {
   return arr.sort((a, b) => {
     if (obj[a][sortBy] < obj[b][sortBy])

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { NavLink, Link } from 'react-router-dom';
 import firebase from 'firebase';
 import { markdown } from 'markdown';
+import Icon from '../../utils/icons';
 import './NotesNav.scss';
 
 // eslint-disable-next-line no-unused-vars
@@ -62,7 +63,7 @@ export default class NotesNav extends Component {
       <nav className="notes-nav">
         <div className="notes-nav__buttons">
           <input placeholder="Search..." value={search} onChange={e => this.setState({ search: e.target.value })} className="notes-nav__search" type="text" />
-          <Link onClick={() => this.setState({ search: '' })} className="notes-nav__buttons__new" to={`/${newKey}`}>New</Link>
+          <Link title="New Note" onClick={() => this.setState({ search: '' })} className="notes-nav__buttons__new" to={`/${newKey}`}><Icon icon="pencil" /></Link>
         </div>
         <ul className="notes-nav__list">
           {filteredNotes.map(noteId => {

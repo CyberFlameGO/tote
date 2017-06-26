@@ -30,12 +30,19 @@
 
         &__new {
             display: flex;
-            padding: 0.2em 0.4em;
+            padding: 0.3em;
             border: 1px solid $gray-300;
             border-radius: 3px;
             margin-left: 0.4em;
+            flex-grow: 0;
             text-decoration: none;
-            color: $gray-600;
+
+            .icon {
+                fill: $gray-400;
+                transition: fill 150ms ease-in-out;
+            }
+
+            &:hover .icon { fill: $red; }
         }
     }
 

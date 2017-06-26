@@ -15,7 +15,7 @@
     }
 
     &__editor {
-        width: 670px;
+        width: 480px;
         max-width: calc(100% - 16px);
 
         &__loading { font-size: 2em; font-weight: 700; }
@@ -27,6 +27,7 @@
         h1, h2, h3, h4, h5, h6 {
             position: relative;
             margin: 0;
+            font-weight: 600;
 
             div { display: inline; }
 

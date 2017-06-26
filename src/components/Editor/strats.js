@@ -10,8 +10,8 @@ function findWithRegex(regex, contentBlock, callback) {
 }
 
 const regs = {
-  BOLD: /\*\*.+\*\*\s/g,
-  EM: /\*(?!\*).+?\*\s/g,
+  BOLD: /\*\*.+\*\*/g,
+  EM: /\*(?!\*).+?\*/g,
   DEL: /~.*~+/g,
   CODE: /`.*`+/g,
   TAG: /#[\w/]+/g,

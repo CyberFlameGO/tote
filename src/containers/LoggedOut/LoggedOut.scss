@@ -1,0 +1,36 @@
+.loggedOut {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: $gray-900;
+
+    &__inner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: $gray-000;
+        border-radius: 3px;
+        padding: 2em;
+        border-bottom: 5px solid $red;
+    }
+
+    &__btn {
+        display: flex;
+        align-items: center;
+        background: none;
+        border: none;
+        font-size: 1em;
+        font-family: inherit;
+        outline: none;
+        cursor: pointer;
+
+        .w {
+            transition: fill 150ms ease-in-out;
+        }
+
+        &:hover, &:focus {
+            .w { fill: $gray-200 !important; }
+        }
+    }
+}

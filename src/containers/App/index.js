@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import firebase from 'firebase';
 import LoggedIn from '../LoggedIn';
+import LoggedOut from '../LoggedOut';
 
 const provider = new firebase.auth.GoogleAuthProvider();
 
-class App extends Component {
+export default class App extends Component {
   constructor(props) {
     super(props);
     this.login = this.login.bind(this);
@@ -29,21 +29,19 @@ class App extends Component {
         this.setState({
           loggedIn: false,
           loading: false,
+          user: null,
         });
       }
     });
   }
 
   login() {
-    firebase.auth().signInWithRedirect(provider)
-      .then((result) => {
-        const user = result.user;
+    firebase.auth().signInWithRedirect(provider).then((result) => {
         this.setState({
           loggedIn: true,
-          user,
+          user: result.user,
         });
-      })
-      .catch((error) => {
+      }).catch((error) => {
         this.setState({
           loggedIn: false,
         })
@@ -62,19 +60,6 @@ class App extends Component {
     if (loading) return null;
     if (loggedIn && user) return <LoggedIn user={user} logout={this.logout} />;
 
-    return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-        <button onClick={this.login}>LOGIN</button>
-      </div>
-    );
+    return <LoggedOut login={this.login} />;
   }
 }
-
-export default App;

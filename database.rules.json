@@ -13,6 +13,11 @@
             "lastModified": {
               ".validate": "newData.isNumber()"
             },
+            "tags": {
+              "$tagIndex": {
+                ".validate": "newData.isString() && newData.val().beginsWith('#')"
+              }
+            },
             ".write": false
           }
         }

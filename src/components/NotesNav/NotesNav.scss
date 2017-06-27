@@ -11,7 +11,31 @@
     }
 
     &__search {
-        flex: 2;
+        &-wrapper {
+            position: relative;
+            display: flex;
+            flex: 2;
+        }
+
+        &-clear {
+            position: absolute;
+            top: 50%;
+            right: 0.8em;
+            padding: 0;
+            border: none;
+            background: none;
+            transform: translateY(-50%);
+            outline: none;
+            cursor: pointer;
+
+            .icon { fill: $gray-400; transition: fill 150ms ease-in-out; }
+
+            &:hover, &:focus {
+                .icon { fill: $gray-600; }
+            }
+        }
+
+        width: 100%;
         padding: 0.4em 0.4em 0.4em 0.6em;
         border: 1px solid $gray-300;
         border-radius: 3px;

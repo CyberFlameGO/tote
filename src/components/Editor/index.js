@@ -22,8 +22,9 @@ export default class Editor extends Component {
       prismjs,
       new CompositeDecorator([
         { strategy: strats.code, component: comps.code },
-        { strategy: strats.strong, component: comps.strong },
         { strategy: strats.del, component: comps.del },
+        { strategy: strats.strongEm, component: comps.strongEm },
+        { strategy: strats.strong, component: comps.strong },
         { strategy: strats.em, component: comps.em },
         { strategy: strats.tag, component: comps.tag, props: { onClick: props.updateSearch } },
         { strategy: strats.h6, component: comps.h6 },

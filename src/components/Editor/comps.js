@@ -18,6 +18,7 @@ function wrap(props, comp, type) {
 export const code = p => wrap(p, <code />);
 export const em = p => wrap(p, <em />);
 export const strong = p => wrap(p, <strong />);
+export const strongEm = p => <strong data-offset-key={p.offsetKey}><em>{p.children}</em></strong>;
 export const del = p => wrap(p, <del />);
 export const tag = p => wrap(p, <span className="tag" spellCheck={false} />, 'tag');
 

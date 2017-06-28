@@ -10,8 +10,9 @@ function findWithRegex(regex, contentBlock, callback) {
 }
 
 export const regs = {
-  BOLD: /\*\*.+\*\*/g,
-  EM: /\*(?!\*).+?\*/g,
+  STRONG: /(\*){2}[^*]+(\*){2}/g,
+  EM: /[^*]\*[^*]+\*/g,
+  STRONG_EM: /(\*){3}[^*]+(\*){3}/g,
   DEL: /~.*~+/g,
   CODE: /`.*`+/g,
   TAG: /#[\w/]+/g,
@@ -25,8 +26,9 @@ export const regs = {
 
 export const del = (conBlock, cb) => findWithRegex(regs.DEL, conBlock, cb);
 export const code = (conBlock, cb) => findWithRegex(regs.CODE, conBlock, cb);
-export const strong = (conBlock, cb) => findWithRegex(regs.BOLD, conBlock, cb);
+export const strong = (conBlock, cb) => findWithRegex(regs.STRONG, conBlock, cb);
 export const em = (conBlock, cb) => findWithRegex(regs.EM, conBlock, cb);
+export const strongEm = (conBlock, cb) => findWithRegex(regs.STRONG_EM, conBlock, cb);
 export const tag = (conBlock, cb) => findWithRegex(regs.TAG, conBlock, cb);
 export const h6 = (conBlock, cb) => findWithRegex(regs.H6, conBlock, cb);
 export const h5 = (conBlock, cb) => findWithRegex(regs.H5, conBlock, cb);

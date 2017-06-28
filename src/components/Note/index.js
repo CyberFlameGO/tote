@@ -3,7 +3,7 @@ import { shape, func, string, bool } from 'prop-types';
 import types from '../../utils/types';
 import Editor from '../Editor';
 import firebase from 'firebase';
-import saveNote from '../Editor/saveNote';
+import saveNote from '../../utils/saveNote';
 import Icon from '../../utils/icons';
 import './Note.scss';
 
@@ -73,7 +73,7 @@ export default class Note extends Component {
       <div className="note">
         {!online && <div className="note__offline"><Icon icon="warning" />You are offline! Your changes will be saved when you reconnect.</div>}
         <div className="note__editor">
-          {loading ? <span className="note__editor__loading">Loading...</span> :
+          {loading && online ? <span className="note__editor__loading">Loading...</span> :
             <Editor
               updateSearch={updateSearch}
               ref={(r) => { this.editor = r; }}

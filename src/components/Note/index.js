@@ -4,6 +4,7 @@ import types from '../../utils/types';
 import Editor from '../Editor';
 import firebase from 'firebase';
 import saveNote from '../../utils/saveNote';
+import deleteNote from '../../utils/deleteNote';
 import Icon from '../../utils/icons';
 import './Note.scss';
 
@@ -31,8 +32,9 @@ export default class Note extends Component {
   constructor(props) {
     super(props);
     this.save = this.save.bind(this);
+    this.delete = this.delete.bind(this);
     this.focus = this.focus.bind(this);
-    this.state = { loading: false };
+    this.state = { loading: false, text: '' };
   }
 
   componentDidMount() {
@@ -60,6 +62,15 @@ export default class Note extends Component {
     saveNote(editorState, user.uid, match.params.noteId);
   }
 
+  delete() {
+    const { user, match, history } = this.props;
+    deleteNote(user.uid, match.params.noteId).then(() => {
+      this.setState({ text: '' }, () => {
+        history.push('/');
+      });
+    });
+  }
+
   focus() {
     if (this.editor && this.editor.editor) this.editor.editor.focus();
   }
@@ -71,6 +82,9 @@ export default class Note extends Component {
 
     return (
       <div className="note">
+        <div className="note__buttons">
+          {text !== '' && <button onClick={this.delete}><Icon icon="trash" /></button>}
+        </div>
         {!online && <div className="note__offline"><Icon icon="warning" />You are offline! Your changes will be saved when you reconnect.</div>}
         <div className="note__editor">
           {loading && online ? <span className="note__editor__loading">Loading...</span> :

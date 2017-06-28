@@ -67,7 +67,7 @@ export default class NotesNav extends Component {
             <input placeholder="Search..." value={search} onChange={e => updateSearch(e.target.value)} className="notes-nav__search" type="text" />
             {search !== '' && <button onClick={() => updateSearch('')} className="notes-nav__search-clear"><Icon icon="cross" size={10} /></button>}
           </div>
-          <Link title="New Note" onClick={() => updateSearch('')} className="notes-nav__buttons__new" to={`/${newKey}`}><Icon icon="pencil" /></Link>
+          <Link title="New Note" onClick={() => updateSearch('')} className="notes-nav__buttons__new" to={`/${newKey}`}><Icon icon="addFile" /></Link>
         </div>
         <ul className="notes-nav__list">
           {filteredNotes.map(noteId => {

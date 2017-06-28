@@ -38,6 +38,29 @@
         color: $gray-300;
     }
 
+    &__buttons {
+        position: fixed;
+        top: 1em;
+        right: 1em;
+
+        button {
+            background: none;
+            border: none;
+            padding: 0;
+            margin: 0;
+            cursor: pointer;
+
+            .icon {
+                fill: $gray-400;
+                transition: fill 150ms $standard;
+            }
+
+            &:hover { .icon { fill: $gray-600; } }
+
+            & + & { margin-top: 1em; }
+        }
+    }
+
     &__editor {
         width: 480px;
         max-width: calc(100% - 16px);

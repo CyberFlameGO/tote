@@ -1,7 +1,7 @@
 .nav {
     position: relative;
     width: 200px;
-    padding-top: 4em;
+    padding-top: 1em;
 
     &__tagTree {
         color: $gray-300;
@@ -28,6 +28,11 @@
         border-top: 1px solid $gray-600;
         color: $gray-400;
         font-family: inherit;
+        cursor: pointer;
+
+        &:hover {
+            background-color: $gray-800;
+        }
     }
 
     &__tag {
@@ -36,9 +41,10 @@
             display: block;
             box-sizing: border-box;
             width: calc(100% + 2em);
+            padding: 0.4em 0.6em 0.4em 5em;
             margin-left: -2em;
             font-weight: 300;
-            padding: 0.4em 0.6em 0.4em 5em;
+            cursor: pointer;
 
             &::before {
                 content: '#';

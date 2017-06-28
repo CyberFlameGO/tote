@@ -82,14 +82,13 @@
             position: relative;
             margin: 0;
             font-weight: 600;
+            transform: translateX(-20px);
 
             div { display: inline; }
 
             &::before {
-                position: absolute;
-                left: -24px;
-                bottom: 0.5em;
                 font-size: 10px;
+                margin-right: 1em;
                 font-weight: 500;
                 color: $gray-400;
             }

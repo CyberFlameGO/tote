@@ -20,7 +20,12 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    firebase.auth().onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged((user, err) => {
+      if (err) {
+        console.error(err);
+        this.setState({ loading: false });
+      }
+
       if (user) {
         this.setState({
           loggedIn: true,
@@ -45,7 +50,7 @@ export default class App extends Component {
       if (snap.val() === true) {
         if (!this.state.online) console.info('Now connected! 🎉');
         this.setState({ online: true });
-      } else {
+      } else if (!this.state.loading) {
         console.info('Disconnected. 😭')
         this.setState({ online: false });
       }

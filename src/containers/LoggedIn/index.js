@@ -46,7 +46,7 @@ export default class LoggedIn extends Component {
       <Router>
         <main className="main">
           <Nav open={nav} notes={this.state.notes} logout={this.props.logout} updateSearch={this.search} />
-          <NotesNav open={notesNav} uid={user.uid} notes={this.state.notes} updateSearch={this.search} search={search} />
+          <NotesNav open={notesNav} notes={this.state.notes} updateSearch={this.search} search={search} />
 
           <div className="mobile-nav">
             <button className="mobile-nav__btn" onClick={this.openNav}>Tags</button>

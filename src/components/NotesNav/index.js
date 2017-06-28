@@ -41,19 +41,18 @@ function timeSince(date) {
 export default class NotesNav extends Component {
   static propTypes = {
     notes: object,
-    uid: string.isRequired,
     search: string.isRequired,
     updateSearch: func.isRequired,
     open: bool.isRequired,
   }
 
   render() {
-    const { uid, notes, open } = this.props;
+    const { notes, open } = this.props;
     const { search, updateSearch } = this.props;
     // const noteKeys = sort(Object.keys(notes || {}), notes, 'lastModified');
 
     const noteKeys = Object.keys(notes || {});
-    const newKey = firebase.database().ref(`/users/${uid}/notes/`).push().key;
+    const newKey = firebase.database().ref().push().key;
 
     const filteredNotes = search === '' ? noteKeys : noteKeys.filter(noteKey => {
       const re = new RegExp(search, 'i');

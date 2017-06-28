@@ -8,6 +8,10 @@
     padding: 2em;
     margin-bottom: 2em;
 
+    @include media($on-mobile) {
+        margin-top: 2em;
+    }
+
     &__offline {
         position: absolute;
         top: 0;

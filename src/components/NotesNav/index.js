@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import { bool, func, string, object } from 'prop-types';
 import { NavLink, Link } from 'react-router-dom';
 import firebase from 'firebase';
 import { markdown } from 'markdown';
@@ -40,14 +40,15 @@ function timeSince(date) {
 
 export default class NotesNav extends Component {
   static propTypes = {
-    notes: PropTypes.object,
-    uid: PropTypes.string.isRequired,
-    search: PropTypes.string.isRequired,
-    updateSearch: PropTypes.func.isRequired,
+    notes: object,
+    uid: string.isRequired,
+    search: string.isRequired,
+    updateSearch: func.isRequired,
+    open: bool.isRequired,
   }
 
   render() {
-    const { uid, notes } = this.props;
+    const { uid, notes, open } = this.props;
     const { search, updateSearch } = this.props;
     // const noteKeys = sort(Object.keys(notes || {}), notes, 'lastModified');
 
@@ -60,7 +61,7 @@ export default class NotesNav extends Component {
     });
 
     return (
-      <nav className="notes-nav">
+      <nav className={`notes-nav ${open ? 'is-open' : ''}`}>
         <div className="notes-nav__buttons">
           <div className="notes-nav__search-wrapper">
             <input placeholder="Search..." value={search} onChange={e => updateSearch(e.target.value)} className="notes-nav__search" type="text" />

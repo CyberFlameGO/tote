@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { func } from 'prop-types';
+import { func, bool } from 'prop-types';
 import types from '../../utils/types';
 import './Nav.scss';
 
@@ -8,6 +8,7 @@ export default class Nav extends Component {
     notes: types.notes.isRequired,
     updateSearch: func.isRequired,
     logout: func.isRequired,
+    open: bool.isRequired,
   }
 
   constructor(props) {
@@ -68,12 +69,12 @@ export default class Nav extends Component {
   }
 
   render() {
-    const { notes } = this.props;
+    const { notes, open } = this.props;
     const tags = this.flattenTags(notes);
     const tagTree = tags.reduce(this.reduceTagsToTree, {});
 
     return (
-      <nav className="nav">
+      <nav className={`nav ${open ? 'is-open' : ''}`}>
         <ul className="nav__tagTree">
           {this.renderTags(tagTree)}
         </ul>

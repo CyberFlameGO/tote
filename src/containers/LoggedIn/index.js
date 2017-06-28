@@ -17,9 +17,12 @@ export default class LoggedIn extends Component {
   constructor(props) {
     super(props);
     this.search = this.search.bind(this);
+    this.closeAnyNav = this.closeAnyNav.bind(this);
+    this.openNav = this.openNav.bind(this);
+    this.openNotesNav = this.openNotesNav.bind(this);
   }
 
-  state = { notes: {}, search: '' }
+  state = { notes: {}, search: '', notesNav: false, nav: false }
 
   componentDidMount() {
     const { uid } = this.props.user;
@@ -29,20 +32,28 @@ export default class LoggedIn extends Component {
     });
   }
 
-  search(search) {
-    this.setState({ search });
-  }
+  search(search) { this.setState({ search }); }
+
+  openNotesNav() { this.setState({ notesNav: true, nav: false }); }
+  openNav() { this.setState({ notesNav: false, nav: true }); }
+  closeAnyNav() { this.setState({ notesNav: false, nav: false }); }
 
   render() {
     const { user, online } = this.props;
-    const { search } = this.state;
+    const { search, nav, notesNav } = this.state;
 
     return (
       <Router>
         <main className="main">
-          <Nav notes={this.state.notes} logout={this.props.logout} updateSearch={this.search} />
-          <NotesNav uid={user.uid} notes={this.state.notes} updateSearch={this.search} search={search} />
+          <Nav open={nav} notes={this.state.notes} logout={this.props.logout} updateSearch={this.search} />
+          <NotesNav open={notesNav} uid={user.uid} notes={this.state.notes} updateSearch={this.search} search={search} />
 
+          <div className="mobile-nav">
+            <button className="mobile-nav__btn" onClick={this.openNav}>Tags</button>
+            <button className="mobile-nav__btn" onClick={this.openNotesNav}>Notes</button>
+          </div>
+
+          <div className={`mobile-overlay ${nav || notesNav ? 'is-open' : ''}`} onClick={this.closeAnyNav} />
           <Route exact path="/:noteId?" render={(p) => <Note online={online} updateSearch={this.search} user={user} {...p} />} />
         </main>
       </Router>

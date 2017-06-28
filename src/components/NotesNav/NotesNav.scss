@@ -6,8 +6,19 @@
     border-right: 1px solid $gray-300;
 
     @include media($on-mobile) {
-        height: auto;
-        width: 100%;
+        position: fixed;
+        z-index: 999;
+        top: 0;
+        left: 0;
+        width: 70%;
+        height: 100%;
+        transform: translateX(-100%);
+        transition: transform 150ms $exit;
+
+        &.is-open {
+            transform: translateX(0);
+            transition-timing-function: $enter;
+        }
     }
 
     &__search {
@@ -45,6 +56,8 @@
             border-color: $blue-300;
             box-shadow: 0 0 0 2px $blue-100;
         }
+
+        @include media($on-mobile) { font-size: 1.2em; }
     }
 
     &__buttons {
@@ -55,6 +68,8 @@
 
         &__new {
             display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 0.3em;
             border: 1px solid $gray-300;
             border-radius: 3px;

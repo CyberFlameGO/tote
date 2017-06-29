@@ -1,5 +1,6 @@
 import firebase from 'firebase';
 import { regs } from '../components/Editor/strats';
+import { stateToMarkdown } from 'draft-js-export-markdown';
 
 /**
  * Saves a note to the firebase database
@@ -10,7 +11,7 @@ import { regs } from '../components/Editor/strats';
 export default function saveNote(editorState, uid, noteId) {
   const db = firebase.database();
   const refStr = `users/${uid}/notes/${noteId}`;
-  const text = editorState.getCurrentContent().getPlainText();
+  const text = stateToMarkdown(editorState.getCurrentContent());
   const tagSet = new Set(text.match(regs.TAG));
 
   return db.ref(refStr).set({

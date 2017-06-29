@@ -6,6 +6,9 @@ import * as strats from './strats';
 import * as comps from './comps';
 import MultiDecorator from 'draft-js-multidecorators';
 import prismjs from './prism';
+import checkReturnForState from './utils/checkReturnForState';
+import checkCharacterForState from './utils/checkCharacterForState';
+import { stateFromMarkdown } from 'draft-js-import-markdown';
 
 export default class Editor extends Component {
   static propTypes = {
@@ -17,6 +20,8 @@ export default class Editor extends Component {
   constructor(props) {
     super(props);
     this.onChange = this.onChange.bind(this);
+    this.handleBeforeInput = this.handleBeforeInput.bind(this);
+    this.handleReturn = this.handleReturn.bind(this);
 
     this.compositeDecorator = new MultiDecorator([
       prismjs,
@@ -36,10 +41,18 @@ export default class Editor extends Component {
       ]),
     ]);
 
-    const contentState = ContentState.createFromText(props.text || '');
-    const editorState = EditorState.createWithContent(contentState, this.compositeDecorator);
 
-    this.state = { editorState };
+    if (props.text) {
+      const contentState = stateFromMarkdown(props.text);
+      const editorState = EditorState.createWithContent(contentState, this.compositeDecorator);
+
+      this.state = { editorState };
+    } else {
+      const contentState = ContentState.createFromText('');
+      const editorState = EditorState.createWithContent(contentState, this.compositeDecorator);
+
+      this.state = { editorState };
+    }
   }
 
   componentWillReceiveProps(newProps) {
@@ -62,10 +75,33 @@ export default class Editor extends Component {
     });
   }
 
+  handleBeforeInput(character, editorState) {
+    if (character !== ' ') {
+      return 'not-handled';
+    }
+    const newEditorState = checkCharacterForState(editorState, character);
+    if (editorState !== newEditorState) {
+      this.onChange(newEditorState);
+      return 'handled';
+    }
+    return 'not-handled';
+  }
+
+  handleReturn(ev, editorState) {
+    const newEditorState = checkReturnForState(editorState, ev);
+    if (editorState !== newEditorState) {
+      this.onChange(newEditorState);
+      return 'handled';
+    }
+    return 'not-handled';
+  }
+
   render() {
     const { editorState } = this.state;
     return (
       <DraftEditor
+        handleBeforeInput={this.handleBeforeInput}
+        handleReturn={this.handleReturn}
         editorState={editorState}
         onChange={this.onChange}
         spellCheck

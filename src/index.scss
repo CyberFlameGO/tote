@@ -11,6 +11,19 @@ body {
   font-family: $body-font;
   font-size: $body-font-size;
   line-height: $body-line-height;
+  background-color: $gray-900;
+
+  @include media($on-mobile) {
+    background-color: white;
+  }
 }
 
 code { font-family: $mono-font; }
+
+.loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  color: $gray-200;
+  transform: translate(-50%, -50%);
+}

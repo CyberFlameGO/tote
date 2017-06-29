@@ -11,12 +11,15 @@ export default class App extends Component {
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
     this.detectConnection = this.detectConnection.bind(this);
-  }
 
-  state = {
-    loading: true,
-    loggedIn: false,
-    online: true,
+    const { currentUser } = firebase.auth();
+    const loggedIn = Boolean(currentUser);
+    this.state = {
+      loading: !loggedIn,
+      loggedIn,
+      online: true,
+      user: currentUser,
+    }
   }
 
   componentDidMount() {
@@ -24,9 +27,7 @@ export default class App extends Component {
       if (err) {
         console.error(err);
         this.setState({ loading: false });
-      }
-
-      if (user) {
+      } else if (user) {
         this.setState({
           loggedIn: true,
           loading: false,
@@ -80,8 +81,8 @@ export default class App extends Component {
   render() {
     const { loading, loggedIn, user, online } = this.state;
 
-    if (loading) return null;
-    if (loggedIn && user) return <LoggedIn online={online} user={user} logout={this.logout} />;
+    if (!loggedIn && loading) return <h1 className="loading">Loading your notes...</h1>;
+    if (loggedIn || user) return <LoggedIn online={online} user={user} logout={this.logout} />;
     return <LoggedOut online={online} login={this.login} />;
   }
 }

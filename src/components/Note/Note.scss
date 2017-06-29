@@ -6,7 +6,6 @@
     background-color: white;
     flex: 2;
     padding: 2em;
-    margin-bottom: 2em;
 
     @include media($on-mobile) {
         margin-top: 2em;

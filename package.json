@@ -61,6 +61,7 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "deploy": "node scripts/build.js && firebase deploy",
+    "deploy:test": "node scripts/build.js && firebase deploy && lighthouse https://tote-7a7d7.firebaseapp.com/ --view",
     "test": "node scripts/test.js --env=jsdom"
   },
   "jest": {

@@ -1,4 +1,5 @@
 import leaveList from './leaveList';
+import insertEmptyBlock from './insertEmptyBlock';
 
 export default function checkReturnForState(editorState, ev) {
   let newEditorState = editorState;
@@ -13,5 +14,9 @@ export default function checkReturnForState(editorState, ev) {
     newEditorState = leaveList(editorState);
   }
 
+  if (newEditorState === editorState &&
+    (ev.ctrlKey || ev.shiftKey || ev.metaKey || ev.altKey || /^header-/.test(type))) {
+    newEditorState = insertEmptyBlock(editorState);
+  }
   return newEditorState;
 }

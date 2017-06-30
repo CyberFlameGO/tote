@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "clipboard": "^1.7.1",
     "draft-js": "^0.10.1",
     "draft-js-checkable-list-item": "^2.0.5",
     "draft-js-export-markdown": "^0.2.2",

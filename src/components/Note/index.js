@@ -33,6 +33,7 @@ export default class Note extends Component {
     super(props);
     this.save = this.save.bind(this);
     this.delete = this.delete.bind(this);
+    this.copy = this.copy.bind(this);
     this.focus = this.focus.bind(this);
     this.state = { loading: false, text: '' };
   }
@@ -71,6 +72,17 @@ export default class Note extends Component {
     });
   }
 
+  copy() {
+    const { text } = this.state;
+    const el = document.createElement('textarea');
+    el.setAttribute('id', 'copier');
+    el.value = text;
+    document.body.appendChild(el); 
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+  }
+
   focus() {
     if (this.editor && this.editor.editor) this.editor.editor.focus();
   }
@@ -84,6 +96,7 @@ export default class Note extends Component {
       <div className="note">
         <div className="note__buttons">
           {text !== '' && <button onClick={this.delete}><Icon icon="trash" /></button>}
+          {text !== '' && <button onClick={this.copy}><Icon icon="sync" /></button>}
         </div>
         {!online && <div className="note__offline"><Icon icon="warning" />You are offline! Your changes will be saved when you reconnect.</div>}
         <div className="note__editor">

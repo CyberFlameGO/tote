@@ -43,6 +43,7 @@
         right: 1em;
 
         button {
+            display: block;
             background: none;
             border: none;
             padding: 0;
@@ -56,7 +57,7 @@
 
             &:hover { .icon { fill: $gray-600; } }
 
-            & + & { margin-top: 1em; }
+            &:not(:first-of-type) { margin-top: 1em; }
         }
     }
 

@@ -64,8 +64,8 @@ export default class Note extends Component {
     return (
       <div className="note">
         <div className="note__buttons">
-          {!text && <button onClick={this.delete}><Icon icon="trash" /></button>}
-          {!text && <button onClick={this.copy}><Icon icon="sync" /></button>}
+          {text && <button onClick={this.delete}><Icon icon="trash" /></button>}
+          {text && <button onClick={this.copy}><Icon icon="sync" /></button>}
         </div>
         {!online && <div className="note__offline"><Icon icon="warning" />You are offline! Your changes will be saved when you reconnect.</div>}
         <div className="note__editor">

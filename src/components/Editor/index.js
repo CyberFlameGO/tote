@@ -8,6 +8,8 @@ import MultiDecorator from 'draft-js-multidecorators';
 import prismjs from './prism';
 import checkReturnForState from './utils/checkReturnForState';
 import checkCharacterForState from './utils/checkCharacterForState';
+import { stateToMarkdown } from 'draft-js-export-markdown';
+import { copy } from '../../utils/helpers';
 
 export default class Editor extends Component {
   static propTypes = {
@@ -23,6 +25,8 @@ export default class Editor extends Component {
     this.onChange = this.onChange.bind(this);
     this.handleBeforeInput = this.handleBeforeInput.bind(this);
     this.handleReturn = this.handleReturn.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.handleKeyUp = this.handleKeyUp.bind(this);
 
     this.compositeDecorator = new MultiDecorator([
       prismjs,
@@ -95,17 +99,36 @@ export default class Editor extends Component {
     return 'not-handled';
   }
 
+  handleKeyDown(e) {
+    if (e.which === 91) this.setState({ ctrl: true });
+    if (e.which === 67 && this.state.ctrl) {
+      e.preventDefault();
+      const text = stateToMarkdown(this.state.editorState.getCurrentContent());
+      copy(text);
+    }
+  }
+
+  handleKeyUp(e) {
+    if (e.which === 91) this.setState({ ctrl: false });
+  }
+
   render() {
     const { editorState } = this.state;
     return (
-      <DraftEditor
-        handleBeforeInput={this.handleBeforeInput}
-        handleReturn={this.handleReturn}
-        editorState={editorState}
-        onChange={this.onChange}
-        spellCheck
-        ref={(r) => { this.editor = r; }}
-      />
+      <div
+        style={{ height: '100%' }}
+        onKeyDown={this.handleKeyDown}
+        onKeyUp={this.handleKeyUp}
+      >
+        <DraftEditor
+          handleBeforeInput={this.handleBeforeInput}
+          handleReturn={this.handleReturn}
+          editorState={editorState}
+          onChange={this.onChange}
+          spellCheck
+          ref={(r) => { this.editor = r; }}
+        />
+      </div>
     );
   }
 }

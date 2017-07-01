@@ -22,13 +22,13 @@ export default class LoggedIn extends Component {
     this.openNotesNav = this.openNotesNav.bind(this);
   }
 
-  state = { notes: {}, search: '', notesNav: false, nav: false }
+  state = { notes: {}, loading: true, search: '', notesNav: false, nav: false }
 
   componentDidMount() {
     const { uid } = this.props.user;
     const notesRef = firebase.database().ref(`users/${uid}/notes`);
     notesRef.on('value', (snapshot) => {
-      this.setState({ notes: snapshot.val() });
+      this.setState({ notes: snapshot.val(), loading: false });
     });
   }
 
@@ -40,7 +40,7 @@ export default class LoggedIn extends Component {
 
   render() {
     const { user, online } = this.props;
-    const { search, nav, notesNav } = this.state;
+    const { search, nav, notesNav, notes, loading } = this.state;
 
     return (
       <Router>
@@ -54,7 +54,7 @@ export default class LoggedIn extends Component {
           </div>
 
           <div className={`mobile-overlay ${nav || notesNav ? 'is-open' : ''}`} onClick={this.closeAnyNav} />
-          <Route exact path="/:noteId?" render={(p) => <Note online={online} updateSearch={this.search} user={user} {...p} />} />
+          <Route exact path="/:noteId?" render={(p) => <Note notes={notes} loading={loading} online={online} updateSearch={this.search} user={user} {...p} />} />
         </main>
       </Router>
     );

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { bool, func, string, object } from 'prop-types';
 import { NavLink, Link } from 'react-router-dom';
 import firebase from 'firebase';
-import { markdown } from 'markdown';
+import { convertFromRaw } from 'draft-js';
 import Icon from '../../utils/icons';
 import './NotesNav.scss';
 
@@ -56,7 +56,12 @@ export default class NotesNav extends Component {
 
     const filteredNotes = search === '' ? noteKeys : noteKeys.filter(noteKey => {
       const re = new RegExp(search, 'i');
-      return notes[noteKey].text.search(re) !== -1;
+      const { text } = notes[noteKey];
+      const plainText = convertFromRaw({
+        ...text,
+        entityMap: text.entityMap || {},
+      }).getPlainText();
+      return plainText.search(re) !== -1;
     });
 
     return (
@@ -71,16 +76,17 @@ export default class NotesNav extends Component {
         <ul className="notes-nav__list">
           {filteredNotes.map(noteId => {
             const { lastModified, text } = notes[noteId];
+            const contentState = convertFromRaw({
+              ...text,
+              entityMap: text.entityMap || {},
+            });
+            const label = contentState.getPlainText();
             return (
               <li className="notes-nav__list-item" key={noteId}>
                 <NavLink
                   activeClassName="is-active"
                   className="notes-nav__link"
-                  to={`/${noteId}`}
-                  dangerouslySetInnerHTML={{
-                    __html: text !== '' ? markdown.toHTML(text) : markdown.toHTML('# A blank new note!'),
-                  }}
-                />
+                  to={`/${noteId}`}>{label}</NavLink>
                 <span className="notes-nav__time">{timeSince(lastModified)}</span>
               </li>
             );

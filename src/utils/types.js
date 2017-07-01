@@ -1,4 +1,4 @@
-import { shape, string, objectOf, arrayOf, number } from 'prop-types';
+import { shape, string, object, objectOf, arrayOf, number } from 'prop-types';
 
 export default {
   user: shape({
@@ -6,7 +6,7 @@ export default {
     email: string.isRequired,
   }),
   notes: objectOf(shape({
-    text: string.isRequired,
+    text: object.isRequired,
     lastModified: number.isRequired,
     tags: arrayOf(string),
   }))

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { string } from 'prop-types';
-import { Editor as DraftEditor, ContentState, EditorState, CompositeDecorator } from 'draft-js';
+import { string, shape, array } from 'prop-types';
+import { Editor as DraftEditor, ContentState, EditorState, convertFromRaw, CompositeDecorator } from 'draft-js';
 import types from '../../utils/types';
 import * as strats from './strats';
 import * as comps from './comps';
@@ -8,13 +8,14 @@ import MultiDecorator from 'draft-js-multidecorators';
 import prismjs from './prism';
 import checkReturnForState from './utils/checkReturnForState';
 import checkCharacterForState from './utils/checkCharacterForState';
-import { stateFromMarkdown } from 'draft-js-import-markdown';
 
 export default class Editor extends Component {
   static propTypes = {
     user: types.user.isRequired,
     noteId: string,
-    text: string,
+    text: shape({
+      blocks: array,
+    }),
   }
 
   constructor(props) {
@@ -41,25 +42,23 @@ export default class Editor extends Component {
       ]),
     ]);
 
+    const contentState = props.text ? convertFromRaw({
+        ...props.text,
+        entityMap: props.text.entityMap || {},
+      }) : ContentState.createFromText('');
 
-    if (props.text) {
-      const contentState = stateFromMarkdown(props.text);
-      const editorState = EditorState.createWithContent(contentState, this.compositeDecorator);
-
-      this.state = { editorState };
-    } else {
-      const contentState = ContentState.createFromText('');
-      const editorState = EditorState.createWithContent(contentState, this.compositeDecorator);
-
-      this.state = { editorState };
-    }
+    const editorState = EditorState.createWithContent(contentState, this.compositeDecorator);
+    this.state = { editorState };
   }
 
   componentWillReceiveProps(newProps) {
-    if (newProps.noteId !== this.props.noteId) {
-      const contentState = ContentState.createFromText(newProps.text || '');
-      const editorState = EditorState.createWithContent(contentState, this.compositeDecorator);
+    if (this.props.text === undefined && newProps.text !== undefined) {
+      const contentState = convertFromRaw({
+          ...newProps.text,
+          entityMap: newProps.text.entityMap || {},
+        });
 
+      const editorState = EditorState.createWithContent(contentState, this.compositeDecorator);
       this.setState({ editorState });
     }
   }

@@ -7,9 +7,6 @@
         "notes": {
           "$noteId": {
 						".validate": "$noteId.beginsWith('-') && newData.hasChildren(['text', 'lastModified'])",
-            "text": {
-              ".validate": "newData.isString()"
-            },
             "lastModified": {
               ".validate": "newData.isNumber()"
             },

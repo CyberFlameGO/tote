@@ -81,7 +81,7 @@ export default class App extends Component {
   render() {
     const { loading, loggedIn, user, online } = this.state;
 
-    if (!loggedIn && loading) return <h1 className="loading">Loading your notes...</h1>;
+    if (!loggedIn && loading) return <h1 className="loading">Logging you in...</h1>;
     if (loggedIn || user) return <LoggedIn online={online} user={user} logout={this.logout} />;
     return <LoggedOut online={online} login={this.login} />;
   }

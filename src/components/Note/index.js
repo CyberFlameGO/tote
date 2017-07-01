@@ -6,6 +6,7 @@ import saveNote from '../../utils/saveNote';
 import deleteNote from '../../utils/deleteNote';
 import Icon from '../../utils/icons';
 import './Note.scss';
+import { convertFromRaw } from 'draft-js';
 
 export default class Note extends Component {
   static propTypes = {
@@ -42,10 +43,16 @@ export default class Note extends Component {
   }
 
   copy() {
-    const { text } = this.state;
+    const { match, notes } = this.props;
+    const { noteId } = match.params;
+    const { text } = notes[noteId];
+    const plainText = convertFromRaw({
+      ...text,
+      entityMap: text.entityMap || {},
+    }).getPlainText();
     const el = document.createElement('textarea');
     el.setAttribute('id', 'copier');
-    el.value = text;
+    el.value = plainText;
     document.body.appendChild(el); 
     el.select();
     document.execCommand('copy');

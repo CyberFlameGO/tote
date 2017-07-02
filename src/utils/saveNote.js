@@ -9,8 +9,7 @@ import { regs } from '../components/Editor/strats';
  * @param {string} noteId - Note's uid
  * @param {boolean} isPrivate - The Note is public or private
  */
-export default function saveNote(editorState, uid, noteId, isPrivate, switching) {
-  console.log(isPrivate);
+export default function saveNote(editorState, { uid, displayName }, noteId, isPrivate, switching) {
   const dir = isPrivate ? 'private' : 'public';
   const db = firebase.database();
   const refStr = `users/${uid}/notes/${dir}/${noteId}`;
@@ -20,9 +19,7 @@ export default function saveNote(editorState, uid, noteId, isPrivate, switching)
   const tagSet = new Set(textString.match(regs.TAG));
 
   if (switching) {
-    console.log('Switching!');
     const delDir = isPrivate ? 'public' : 'private';
-    console.log(delDir);
     const noteToDelete = `users/${uid}/notes/${delDir}/${noteId}`;
     firebase.database().ref(noteToDelete).remove();
   }
@@ -30,6 +27,7 @@ export default function saveNote(editorState, uid, noteId, isPrivate, switching)
   return db.ref(refStr).set({
     lastModified: firebase.database.ServerValue.TIMESTAMP,
     text,
+    author: { uid, displayName },
     tags: Array.from(tagSet),
   }).then(() => noteId);
 }

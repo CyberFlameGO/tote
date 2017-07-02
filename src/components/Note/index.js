@@ -42,12 +42,12 @@ export default class Note extends Component {
     const { user, match } = this.props;
     const { noteId } = match.params;
     const privacy = isPrivate !== undefined ? isPrivate : this.props.isPrivate;
-    saveNote(editorState, user.uid, noteId, privacy, isPrivate !== this.props.isPrivate);
+    saveNote(editorState, user, noteId, privacy, isPrivate !== this.props.isPrivate);
   }
 
   delete() {
-    const { user, match, history } = this.props;
-    deleteNote(user.uid, match.params.noteId).then(() => {
+    const { user, match, isPrivate, history } = this.props;
+    deleteNote(user.uid, match.params.noteId, isPrivate).then(() => {
       history.push('/');
     });
   }

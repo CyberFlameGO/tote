@@ -4,39 +4,9 @@ import { NavLink, Link } from 'react-router-dom';
 import firebase from 'firebase';
 import { convertFromRaw } from 'draft-js';
 import Icon from '../../utils/icons';
+import { timeSince, truncate } from '../../utils/helpers';
+import { markdown } from 'markdown';
 import './NotesNav.scss';
-
-// eslint-disable-next-line no-unused-vars
-function sort(arr, obj, sortBy) {
-  return arr.sort((a, b) => {
-    if (obj[a][sortBy] < obj[b][sortBy])
-      return 1;
-    if (obj[a][sortBy] > obj[b][sortBy])
-      return -1;
-    return 0;
-  });
-}
-
-function timeSince(date) {
-  const seconds = Math.floor((new Date() - date) / 1000);
-  let interval = Math.floor(seconds / 31536000);
-
-  if (interval > 1) return `${interval}y`;
-
-  interval = Math.floor(seconds / 2592000);
-  if (interval > 1) return `${interval}m`;
-
-  interval = Math.floor(seconds / 86400);
-  if (interval > 1) return `${interval}d`;
-
-  interval = Math.floor(seconds / 3600);
-  if (interval > 1) return `${interval}h`;
-
-  interval = Math.floor(seconds / 60);
-  if (interval > 1) return `${interval}m`;
-
-  return Math.floor(seconds) + 's';
-}
 
 export default class NotesNav extends Component {
   static propTypes = {
@@ -71,7 +41,7 @@ export default class NotesNav extends Component {
             <input placeholder="Search..." value={search} onChange={e => updateSearch(e.target.value)} className="notes-nav__search" type="text" />
             {search !== '' && <button onClick={() => updateSearch('')} className="notes-nav__search-clear"><Icon icon="cross" size={10} /></button>}
           </div>
-          <Link title="New Note" onClick={() => updateSearch('')} className="notes-nav__buttons__new" to={`/${newKey}`}><Icon icon="addFile" /></Link>
+          <Link title="New Note" onClick={() => updateSearch('')} className="notes-nav__buttons__new" to={`/n/${newKey}`}><Icon icon="addFile" /></Link>
         </div>
         <ul className="notes-nav__list">
           {filteredNotes.map(noteId => {
@@ -80,13 +50,17 @@ export default class NotesNav extends Component {
               ...text,
               entityMap: text.entityMap || {},
             });
-            const label = contentState.getPlainText();
+            const plainText = contentState.getPlainText();
+            
+            const label = markdown.toHTML(truncate(plainText, 100, '')) || '';
             return (
               <li className="notes-nav__list-item" key={noteId}>
                 <NavLink
                   activeClassName="is-active"
                   className="notes-nav__link"
-                  to={`/${noteId}`}>{label}</NavLink>
+                  to={`/n/${noteId}`}
+                  dangerouslySetInnerHTML={{ __html: label }}
+                />
                 <span className="notes-nav__time">{timeSince(lastModified)}</span>
               </li>
             );

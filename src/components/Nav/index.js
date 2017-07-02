@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { func, bool } from 'prop-types';
 import types from '../../utils/types';
+import { truncate } from '../../utils/helpers';
 import './Nav.scss';
 
 export default class Nav extends Component {
@@ -47,14 +48,16 @@ export default class Nav extends Component {
   renderTags(tagTree, parentTag) {
     const topLevelTags = Object.keys(tagTree);
     return topLevelTags.map(tag => {
-      const tagStr = <span className="nav__tag__label">{tag.startsWith('#') ? tag.substr(1) : tag}</span>;
+      const tagStr = tag.startsWith('#') ? tag.substr(1) : tag;
+      const truncateLength = parentTag ? 8 : 12;
+      const tagLabel = <span className="nav__tag__label">{truncate(tagStr, truncateLength)}</span>;
       if (typeof tagTree[tag] === 'string') {
         const searchTag = parentTag ? `${parentTag}/${tag}` : tag;
-        return <li className="nav__tag" key={tag} onClick={(e) => this.search(e, searchTag)}>{tagStr}</li>;
+        return <li className="nav__tag" key={tag} onClick={(e) => this.search(e, searchTag)}>{tagLabel}</li>;
       }
       return (
         <li key={tag} className="nav__tag has-children" onClick={(e) => this.search(e, tag)}>
-          {tagStr}
+          {tagLabel}
           <ul className="nav__tagTree is-nested">
             {this.renderTags(tagTree[tag], tag)}
           </ul>

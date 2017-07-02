@@ -54,7 +54,7 @@ export default class LoggedIn extends Component {
           </div>
 
           <div className={`mobile-overlay ${nav || notesNav ? 'is-open' : ''}`} onClick={this.closeAnyNav} />
-          <Route exact path="/:noteId?" render={(p) => <Note notes={notes} loading={loading} online={online} updateSearch={this.search} user={user} {...p} />} />
+          <Route exact path="(/n)?/:noteId?" render={(p) => <Note notes={notes} loading={loading} online={online} updateSearch={this.search} user={user} {...p} />} />
         </main>
       </Router>
     );

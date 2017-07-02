@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { shape, func, string, bool } from 'prop-types';
+import firebase from 'firebase';
 import types from '../../utils/types';
 import Editor from '../Editor';
 import saveNote from '../../utils/saveNote';
 import deleteNote from '../../utils/deleteNote';
 import Icon from '../../utils/icons';
 import './Note.scss';
-import { convertFromRaw } from 'draft-js';
 
 export default class Note extends Component {
   static propTypes = {
@@ -22,7 +22,6 @@ export default class Note extends Component {
     super(props);
     this.save = this.save.bind(this);
     this.delete = this.delete.bind(this);
-    this.copy = this.copy.bind(this);
     this.focus = this.focus.bind(this);
   }
 
@@ -31,8 +30,15 @@ export default class Note extends Component {
   }
 
   save(editorState) {
-    const { user, match } = this.props;
-    saveNote(editorState, user.uid, match.params.noteId);
+    const { user, match, history } = this.props;
+    const { noteId } = match.params;
+    if (!noteId) {
+      const newKey = firebase.database().ref().push().key;
+      history.push(`/n/${newKey}`)
+      saveNote(editorState, user.uid, newKey);
+    } else {
+      saveNote(editorState, user.uid, noteId);
+    }
   }
 
   delete() {
@@ -40,23 +46,6 @@ export default class Note extends Component {
     deleteNote(user.uid, match.params.noteId).then(() => {
       history.push('/');
     });
-  }
-
-  copy() {
-    const { match, notes } = this.props;
-    const { noteId } = match.params;
-    const { text } = notes[noteId];
-    const plainText = convertFromRaw({
-      ...text,
-      entityMap: text.entityMap || {},
-    }).getPlainText();
-    const el = document.createElement('textarea');
-    el.setAttribute('id', 'copier');
-    el.value = plainText;
-    document.body.appendChild(el); 
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
   }
 
   focus() {
@@ -72,7 +61,6 @@ export default class Note extends Component {
       <div className="note">
         <div className="note__buttons">
           {text && <button onClick={this.delete}><Icon icon="trash" /></button>}
-          {text && <button onClick={this.copy}><Icon icon="sync" /></button>}
         </div>
         {!online && <div className="note__offline"><Icon icon="warning" />You are offline! Your changes will be saved when you reconnect.</div>}
         <div className="note__editor">

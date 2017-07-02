@@ -42,7 +42,7 @@
         top: 1em;
         right: 1em;
 
-        button {
+        &__btn {
             display: block;
             background: none;
             border: none;
@@ -56,6 +56,12 @@
             }
 
             &:hover { .icon { fill: $gray-600; } }
+
+            &.is-private {
+                .icon {
+                    fill: $red;
+                }
+            }
 
             &:not(:first-of-type) { margin-top: 1em; }
         }

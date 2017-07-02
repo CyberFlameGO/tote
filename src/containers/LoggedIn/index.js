@@ -22,13 +22,19 @@ export default class LoggedIn extends Component {
     this.openNotesNav = this.openNotesNav.bind(this);
   }
 
-  state = { notes: {}, loading: true, search: '', notesNav: false, nav: false }
+  state = { public: {}, private: {}, loading: true, search: '', notesNav: false, nav: false }
 
   componentDidMount() {
     const { uid } = this.props.user;
-    const notesRef = firebase.database().ref(`users/${uid}/notes`);
-    notesRef.on('value', (snapshot) => {
-      this.setState({ notes: snapshot.val(), loading: false });
+
+    const publicRef = firebase.database().ref(`users/${uid}/notes/public`);
+    publicRef.on('value', (snapshot) => {
+      this.setState({ public: snapshot.val(), loading: false });
+    });
+
+    const privateRef = firebase.database().ref(`users/${uid}/notes/private`);
+    privateRef.on('value', (snapshot) => {
+      this.setState({ private: snapshot.val(), loading: false });
     });
   }
 
@@ -40,13 +46,14 @@ export default class LoggedIn extends Component {
 
   render() {
     const { user, online } = this.props;
-    const { search, nav, notesNav, notes, loading } = this.state;
+    const { search, nav, notesNav, loading } = this.state;
+    const notes = { ...this.state.private, ...this.state.public };
 
     return (
       <Router>
         <main className="main">
-          <Nav open={nav} notes={this.state.notes} logout={this.props.logout} updateSearch={this.search} />
-          <NotesNav open={notesNav} notes={this.state.notes} updateSearch={this.search} search={search} />
+          <Nav open={nav} notes={notes} logout={this.props.logout} updateSearch={this.search} />
+          <NotesNav open={notesNav} notes={notes} updateSearch={this.search} search={search} />
 
           <div className="mobile-nav">
             <button className="mobile-nav__btn" onClick={this.openNav}>Tags</button>
@@ -54,7 +61,24 @@ export default class LoggedIn extends Component {
           </div>
 
           <div className={`mobile-overlay ${nav || notesNav ? 'is-open' : ''}`} onClick={this.closeAnyNav} />
-          <Route exact path="(/n)?/:noteId?" render={(p) => <Note notes={notes} loading={loading} online={online} updateSearch={this.search} user={user} {...p} />} />
+          <Route
+            exact
+            path="(/n)?/:noteId?"
+            render={p => {
+              const { noteId } = p.match.params;
+              const isPrivate = Object.prototype.hasOwnProperty.call(this.state.private || {}, noteId);
+              return (
+                <Note
+                  isPrivate={isPrivate}
+                  notes={notes}
+                  loading={loading}
+                  online={online}
+                  updateSearch={this.search}
+                  user={user}
+                  {...p}
+                />
+              );
+            }} />
         </main>
       </Router>
     );

@@ -16,6 +16,11 @@ export default class Note extends Component {
     updateSearch: func.isRequired,
     notes: types.notes.isRequired,
     loading: bool.isRequired,
+    isPrivate: bool,
+  }
+
+  static defaultProps = {
+    isPrivate: false,
   }
 
   constructor(props) {
@@ -24,6 +29,7 @@ export default class Note extends Component {
     this.delete = this.delete.bind(this);
     this.focus = this.focus.bind(this);
     this.onFocus = this.onFocus.bind(this);
+    this.togglePrivate = this.togglePrivate.bind(this);
   }
 
   componentDidMount() {
@@ -32,10 +38,11 @@ export default class Note extends Component {
     }, 100);
   }
 
-  save(editorState) {
+  save(editorState, isPrivate) {
     const { user, match } = this.props;
     const { noteId } = match.params;
-    saveNote(editorState, user.uid, noteId);
+    const privacy = isPrivate !== undefined ? isPrivate : this.props.isPrivate;
+    saveNote(editorState, user.uid, noteId, privacy, isPrivate !== this.props.isPrivate);
   }
 
   delete() {
@@ -62,15 +69,21 @@ export default class Note extends Component {
     }
   }
 
+  togglePrivate() {
+    const { isPrivate } = this.props;
+    this.save(this.editor.state.editorState, !isPrivate);
+  }
+
   render() {
-    const { user, match, online, updateSearch, notes, loading } = this.props;
+    const { user, match, online, updateSearch, notes, isPrivate, loading } = this.props;
     const { noteId } = match.params;
     const text = notes && notes[noteId] ? notes[noteId].text : undefined;
 
     return (
       <div className="note">
         <div className="note__buttons">
-          {text && <button onClick={this.delete}><Icon icon="trash" /></button>}
+          {text && <button className="note__buttons__btn" onClick={this.delete} title="Delete"><Icon icon="trash" /></button>}
+          <button className={`note__buttons__btn ${isPrivate ? 'is-private' : ''}`} onClick={() => this.togglePrivate(isPrivate)} title={isPrivate ? 'Private' : 'Public'}><Icon icon="lock" /></button>
         </div>
         {!online && <div className="note__offline"><Icon icon="warning" />You are offline! Your changes will be saved when you reconnect.</div>}
         <div className="note__editor">

@@ -33,7 +33,7 @@ export default class Nav extends Component {
   }
 
   flattenTags(notes) {
-    const noteKeys = Object.keys(notes);
+    const noteKeys = Object.keys(notes || {});
 
     // Create an array of tag array, and filter out missing arrays
     const tagsMap = noteKeys.map(key => notes[key].tags).filter(a => a);

@@ -65,7 +65,7 @@ export default class Note extends Component {
   render() {
     const { user, match, online, updateSearch, notes, loading } = this.props;
     const { noteId } = match.params;
-    const text = notes[noteId] ? notes[noteId].text : undefined;
+    const text = notes && notes[noteId] ? notes[noteId].text : undefined;
 
     return (
       <div className="note">

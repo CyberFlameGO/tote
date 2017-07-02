@@ -2,20 +2,39 @@
   "rules": {
     "users": {
       "$uid": {
-        ".read": "$uid === auth.uid",
         ".write": "$uid === auth.uid",
         "notes": {
-          "$noteId": {
-						".validate": "$noteId.beginsWith('-') && newData.hasChildren(['text', 'lastModified'])",
-            "lastModified": {
-              ".validate": "newData.isNumber()"
-            },
-            "tags": {
-              "$tagIndex": {
-                ".validate": "newData.isString() && newData.val().beginsWith('#')"
+          "public": {
+            ".read": true,
+            "$noteId": {
+              ".validate": "$noteId.beginsWith('-') && newData.hasChildren(['text', 'lastModified'])",
+              "lastModified": { ".validate": "newData.isNumber()" },
+              "author": {
+                "displayName": { ".validate": "newData.isString()" },
+                "uid": { ".validate": "newData.val() == auth.uid" }
+              },
+              "tags": {
+                "$tagIndex": {
+                  ".validate": "newData.isString() && newData.val().beginsWith('#')"
+                }
               }
-            },
-            ".write": false
+            }
+          },
+          "private": {
+            ".read": "$uid === auth.uid",
+            "$noteId": {
+              ".validate": "$noteId.beginsWith('-') && newData.hasChildren(['text', 'lastModified'])",
+              "lastModified": { ".validate": "newData.isNumber()" },
+              "author": {
+                "displayName": { ".validate": "newData.isString()" },
+                "uid": { ".validate": "newData.val() == auth.uid"}
+              },
+              "tags": {
+                "$tagIndex": {
+                  ".validate": "newData.isString() && newData.val().beginsWith('#')"
+                }
+              }
+            }
           }
         }
       }

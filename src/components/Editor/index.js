@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { string, shape, array } from 'prop-types';
+import { string, shape, array, func } from 'prop-types';
 import { Editor as DraftEditor, ContentState, EditorState, convertFromRaw, CompositeDecorator } from 'draft-js';
 import types from '../../utils/types';
 import * as strats from './strats';
@@ -14,6 +14,7 @@ import { copy } from '../../utils/helpers';
 export default class Editor extends Component {
   static propTypes = {
     user: types.user.isRequired,
+    onFocus: func,
     noteId: string,
     text: shape({
       blocks: array,
@@ -112,6 +113,10 @@ export default class Editor extends Component {
     if (e.which === 91) this.setState({ ctrl: false });
   }
 
+  onFocus() {
+    console.log('Focus!');
+  }
+
   render() {
     const { editorState } = this.state;
     return (
@@ -124,6 +129,7 @@ export default class Editor extends Component {
           handleBeforeInput={this.handleBeforeInput}
           handleReturn={this.handleReturn}
           editorState={editorState}
+          onFocus={this.props.onFocus}
           onChange={this.onChange}
           spellCheck
           ref={(r) => { this.editor = r; }}

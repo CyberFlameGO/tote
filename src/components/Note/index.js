@@ -23,22 +23,19 @@ export default class Note extends Component {
     this.save = this.save.bind(this);
     this.delete = this.delete.bind(this);
     this.focus = this.focus.bind(this);
+    this.onFocus = this.onFocus.bind(this);
   }
 
   componentDidMount() {
-    this.focus();
+    setTimeout(() => {
+      this.focus();
+    }, 100);
   }
 
   save(editorState) {
-    const { user, match, history } = this.props;
+    const { user, match } = this.props;
     const { noteId } = match.params;
-    if (!noteId) {
-      const newKey = firebase.database().ref().push().key;
-      history.push(`/n/${newKey}`)
-      saveNote(editorState, user.uid, newKey);
-    } else {
-      saveNote(editorState, user.uid, noteId);
-    }
+    saveNote(editorState, user.uid, noteId);
   }
 
   delete() {
@@ -50,6 +47,19 @@ export default class Note extends Component {
 
   focus() {
     if (this.editor && this.editor.editor) this.editor.editor.focus();
+  }
+
+  onFocus() {
+    const { history, match } = this.props;
+    const { noteId } = match.params;
+
+    if (!noteId) {
+      const newKey = firebase.database().ref().push().key;
+      history.push(`/n/${newKey}`);
+      setTimeout(() => {
+        this.editor.editor.focus();
+      }, 100);
+    }
   }
 
   render() {
@@ -67,6 +77,7 @@ export default class Note extends Component {
           {loading && online ? <span className="note__editor__loading">Loading...</span> :
             <Editor
               key={noteId}
+              onFocus={this.onFocus}
               updateSearch={updateSearch}
               ref={(r) => { this.editor = r; }}
               save={this.save}

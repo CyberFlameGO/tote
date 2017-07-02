@@ -83,7 +83,13 @@ export default class Note extends Component {
       <div className="note">
         <div className="note__buttons">
           {text && <button className="note__buttons__btn" onClick={this.delete} title="Delete"><Icon icon="trash" /></button>}
-          <button className={`note__buttons__btn ${isPrivate ? 'is-private' : ''}`} onClick={() => this.togglePrivate(isPrivate)} title={isPrivate ? 'Private' : 'Public'}><Icon icon="lock" /></button>
+          <button
+            className={`note__buttons__btn ${isPrivate ? 'is-private' : ''}`}
+            onClick={() => this.togglePrivate(isPrivate)}
+            title={isPrivate ? 'Private' : 'Public'}
+          >
+            <Icon icon={isPrivate ? 'lock' : 'unlock'} />
+          </button>
         </div>
         {!online && <div className="note__offline"><Icon icon="warning" />You are offline! Your changes will be saved when you reconnect.</div>}
         <div className="note__editor">

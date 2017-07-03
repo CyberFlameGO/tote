@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { string, shape, array, func } from 'prop-types';
+import { string, shape, array, func, bool } from 'prop-types';
 import { Editor as DraftEditor, ContentState, EditorState, convertFromRaw, CompositeDecorator } from 'draft-js';
-import types from '../../utils/types';
 import * as strats from './strats';
 import * as comps from './comps';
 import MultiDecorator from 'draft-js-multidecorators';
@@ -13,12 +12,16 @@ import { copy } from '../../utils/helpers';
 
 export default class Editor extends Component {
   static propTypes = {
-    user: types.user.isRequired,
     onFocus: func,
     noteId: string,
+    readOnly: bool,
     text: shape({
       blocks: array,
     }),
+  }
+
+  static defaultProps = {
+    readOnly: false,
   }
 
   constructor(props) {
@@ -119,6 +122,7 @@ export default class Editor extends Component {
 
   render() {
     const { editorState } = this.state;
+    const { onFocus, readOnly } = this.props;
     return (
       <div
         style={{ height: '100%' }}
@@ -129,7 +133,8 @@ export default class Editor extends Component {
           handleBeforeInput={this.handleBeforeInput}
           handleReturn={this.handleReturn}
           editorState={editorState}
-          onFocus={this.props.onFocus}
+          onFocus={onFocus}
+          readOnly={readOnly}
           onChange={this.onChange}
           spellCheck
           ref={(r) => { this.editor = r; }}

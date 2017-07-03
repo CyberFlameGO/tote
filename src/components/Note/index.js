@@ -7,6 +7,7 @@ import saveNote from '../../utils/saveNote';
 import deleteNote from '../../utils/deleteNote';
 import Icon from '../../utils/icons';
 import './Note.scss';
+import { copy } from '../../utils/helpers';
 
 export default class Note extends Component {
   static propTypes = {
@@ -28,6 +29,7 @@ export default class Note extends Component {
     this.save = this.save.bind(this);
     this.delete = this.delete.bind(this);
     this.focus = this.focus.bind(this);
+    this.share = this.share.bind(this);
     this.onFocus = this.onFocus.bind(this);
     this.togglePrivate = this.togglePrivate.bind(this);
   }
@@ -54,6 +56,13 @@ export default class Note extends Component {
 
   focus() {
     if (this.editor && this.editor.editor) this.editor.editor.focus();
+  }
+
+  share() {
+    const { user, match } = this.props;
+    const site = window.location.origin;
+    const link = `${site}/u/${user.uid}/${match.params.noteId}`;
+    copy(link);
   }
 
   onFocus() {
@@ -83,13 +92,16 @@ export default class Note extends Component {
       <div className="note">
         <div className="note__buttons">
           {text && <button className="note__buttons__btn" onClick={this.delete} title="Delete"><Icon icon="trash" /></button>}
-          <button
+          {text && <button
             className={`note__buttons__btn ${isPrivate ? 'is-private' : ''}`}
             onClick={() => this.togglePrivate(isPrivate)}
             title={isPrivate ? 'Private' : 'Public'}
           >
             <Icon icon={isPrivate ? 'lock' : 'unlock'} />
-          </button>
+          </button>}
+          {text && <button className="note__buttons__btn" onClick={this.share} title="Share">
+            <Icon icon="sync" />
+          </button>}
         </div>
         {!online && <div className="note__offline"><Icon icon="warning" />You are offline! Your changes will be saved when you reconnect.</div>}
         <div className="note__editor">

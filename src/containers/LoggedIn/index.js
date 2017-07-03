@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Note from '../../components/Note';  
+import PublicNote from '../../components/PublicNote';  
 import NotesNav from '../../components/NotesNav';  
 import Nav from '../../components/Nav';  
 import types from '../../utils/types';
 import firebase from 'firebase';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import './LoggedIn.scss';
 
 export default class LoggedIn extends Component {
@@ -61,24 +62,33 @@ export default class LoggedIn extends Component {
           </div>
 
           <div className={`mobile-overlay ${nav || notesNav ? 'is-open' : ''}`} onClick={this.closeAnyNav} />
-          <Route
-            exact
-            path="(/n)?/:noteId?"
-            render={p => {
-              const { noteId } = p.match.params;
-              const isPrivate = Object.prototype.hasOwnProperty.call(this.state.private || {}, noteId);
-              return (
-                <Note
-                  isPrivate={isPrivate}
-                  notes={notes}
-                  loading={loading}
-                  online={online}
-                  updateSearch={this.search}
-                  user={user}
-                  {...p}
-                />
-              );
-            }} />
+          <Switch>
+            <Route
+              exact
+              path="(/n)?/:noteId?"
+              render={p => {
+                const { noteId } = p.match.params;
+                const isPrivate = Object.prototype.hasOwnProperty.call(this.state.private || {}, noteId);
+                return (
+                  <Note
+                    isPrivate={isPrivate}
+                    notes={notes}
+                    loading={loading}
+                    online={online}
+                    updateSearch={this.search}
+                    user={user}
+                    {...p}
+                  />
+                );
+              }}
+            />
+
+            <Route
+              exact
+              path="/u/:uid/:noteId"
+              render={p => <PublicNote loading={loading} {...p} />}
+            />
+          </Switch>
         </main>
       </Router>
     );

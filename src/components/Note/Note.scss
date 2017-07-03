@@ -30,6 +30,23 @@
         + .note__editor { margin-top: 2.5em; }
     }
 
+    &__owner {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0.6em 1em;
+        box-sizing: border-box;
+        border-bottom: 1px solid $gray-300;
+        font-size: 0.8rem;
+        color: $gray-300;
+
+        + .note__editor { margin-top: 2.5em; }
+    }
+
     &__placeholder {
         position: absolute;
         top: 2em;

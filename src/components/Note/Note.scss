@@ -8,7 +8,7 @@
     padding: 2em;
 
     @include media($on-mobile) {
-        margin-top: 2em;
+        margin-top: 3em;
     }
 
     &__offline {
@@ -25,9 +25,18 @@
         font-size: 0.8rem;
         color: white;
 
+
         .icon { fill: white; margin-right: 1em; }
 
-        + .note__editor { margin-top: 2.5em; }
+        ~ .note__editor { margin-top: 2.5em; }
+
+        @include media($on-mobile) {
+            font-size: 0.7rem;
+
+            ~ .note__buttons {
+                top: 7em;
+            }
+        }
     }
 
     &__owner {
@@ -44,7 +53,7 @@
         font-size: 0.8rem;
         color: $gray-300;
 
-        + .note__editor { margin-top: 2.5em; }
+        ~ .note__editor { margin-top: 2.5em; }
     }
 
     &__placeholder {
@@ -58,6 +67,10 @@
         position: fixed;
         top: 1em;
         right: 1em;
+
+        @include media($on-mobile) {
+            top: 5em;
+        }
 
         &__btn {
             display: block;

@@ -25,5 +25,11 @@ code { font-family: $mono-font; }
   top: 50%;
   left: 50%;
   color: $gray-200;
+  text-align: center;
   transform: translate(-50%, -50%);
+
+  @include media($on-mobile) {
+    color: $red;
+    font-size: 1.2em;
+  }
 }

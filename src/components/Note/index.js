@@ -90,6 +90,7 @@ export default class Note extends Component {
 
     return (
       <div className="note">
+        {!online && <div className="note__offline"><Icon icon="warning" />You are offline! Your changes will be saved when you reconnect.</div>}
         <div className="note__buttons">
           {text && <button className="note__buttons__btn" onClick={this.delete} title="Delete"><Icon icon="trash" /></button>}
           {text && <button
@@ -103,7 +104,6 @@ export default class Note extends Component {
             <Icon icon="sync" />
           </button>}
         </div>
-        {!online && <div className="note__offline"><Icon icon="warning" />You are offline! Your changes will be saved when you reconnect.</div>}
         <div className="note__editor">
           {loading && online ? <span className="note__editor__loading">Loading...</span> :
             <Editor

@@ -1,3 +1,5 @@
+import { convertFromRaw } from 'draft-js';
+
 export function copy(text) {
   const el = document.createElement('textarea');
   el.setAttribute('id', 'copier');
@@ -41,4 +43,11 @@ export function timeSince(date) {
   if (interval > 1) return `${interval}m`;
 
   return Math.floor(seconds) + 's';
+}
+
+export function fromRaw(text) {
+  return convertFromRaw({
+    ...text,
+    entityMap: text.entityMap || {},
+  });
 }

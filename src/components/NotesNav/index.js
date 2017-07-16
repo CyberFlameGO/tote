@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { bool, func, string, object } from 'prop-types';
 import { NavLink, Link } from 'react-router-dom';
 import firebase from 'firebase';
-import { convertFromRaw } from 'draft-js';
 import Icon from '../../utils/icons';
-import { timeSince, truncate } from '../../utils/helpers';
+import { timeSince, truncate, fromRaw } from '../../utils/helpers';
 import { markdown } from 'markdown';
 import './NotesNav.scss';
 
@@ -27,10 +26,7 @@ export default class NotesNav extends Component {
     const filteredNotes = search === '' ? noteKeys : noteKeys.filter(noteKey => {
       const re = new RegExp(search, 'i');
       const { text } = notes[noteKey];
-      const plainText = convertFromRaw({
-        ...text,
-        entityMap: text.entityMap || {},
-      }).getPlainText();
+      const plainText = fromRaw(text).getPlainText();
       return plainText.search(re) !== -1;
     });
 
@@ -46,13 +42,10 @@ export default class NotesNav extends Component {
         <ul className="notes-nav__list">
           {filteredNotes.map(noteId => {
             const { lastModified, text } = notes[noteId];
-            const contentState = convertFromRaw({
-              ...text,
-              entityMap: text.entityMap || {},
-            });
+            const contentState = fromRaw(text);
             const plainText = contentState.getPlainText();
-            
-            const label = markdown.toHTML(truncate(plainText, 100, '')) || '';
+            const formattedText = plainText.replace('\n', '\n\n');
+            const label = markdown.toHTML(truncate(formattedText, 100, '')) || '';
             return (
               <li className="notes-nav__list-item" key={noteId}>
                 <NavLink

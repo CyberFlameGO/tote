@@ -41,12 +41,12 @@ export default class Editor extends Component {
         { strategy: strats.strong, component: comps.strong },
         { strategy: strats.em, component: comps.em },
         { strategy: strats.tag, component: comps.tag, props: { onClick: props.updateSearch } },
-        { strategy: strats.h6, component: comps.h6 },
-        { strategy: strats.h5, component: comps.h5 },
-        { strategy: strats.h4, component: comps.h4 },
-        { strategy: strats.h3, component: comps.h3 },
-        { strategy: strats.h2, component: comps.h2 },
-        { strategy: strats.h1, component: comps.h1 },
+        // { strategy: strats.h6, component: comps.h6 },
+        // { strategy: strats.h5, component: comps.h5 },
+        // { strategy: strats.h4, component: comps.h4 },
+        // { strategy: strats.h3, component: comps.h3 },
+        // { strategy: strats.h2, component: comps.h2 },
+        // { strategy: strats.h1, component: comps.h1 },
       ]),
     ]);
 

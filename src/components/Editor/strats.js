@@ -16,12 +16,6 @@ export const regs = {
   DEL: /~.*~+/g,
   CODE: /`.*`+/g,
   TAG: /#[\w/]+/g,
-  H6: /^#{6}(?!#)\s.+/g,
-  H5: /^#{5}(?!#)\s.+/g,
-  H4: /^#{4}(?!#)\s.+/g,
-  H3: /^#{3}(?!#)\s.+/g,
-  H2: /^#{2}(?!#)\s.+/g,
-  H1: /^#{1}(?!#)\s.+/g,
 };
 
 export const del = (conBlock, cb) => findWithRegex(regs.DEL, conBlock, cb);
@@ -30,9 +24,4 @@ export const strong = (conBlock, cb) => findWithRegex(regs.STRONG, conBlock, cb)
 export const em = (conBlock, cb) => findWithRegex(regs.EM, conBlock, cb);
 export const strongEm = (conBlock, cb) => findWithRegex(regs.STRONG_EM, conBlock, cb);
 export const tag = (conBlock, cb) => findWithRegex(regs.TAG, conBlock, cb);
-export const h6 = (conBlock, cb) => findWithRegex(regs.H6, conBlock, cb);
-export const h5 = (conBlock, cb) => findWithRegex(regs.H5, conBlock, cb);
-export const h4 = (conBlock, cb) => findWithRegex(regs.H4, conBlock, cb);
-export const h3 = (conBlock, cb) => findWithRegex(regs.H3, conBlock, cb);
-export const h2 = (conBlock, cb) => findWithRegex(regs.H2, conBlock, cb);
-export const h1 = (conBlock, cb) => findWithRegex(regs.H1, conBlock, cb);
+export const hr = (conBlock, cb) => findWithRegex(regs.HR, conBlock, cb)

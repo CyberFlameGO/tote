@@ -1,13 +1,19 @@
 import { convertFromRaw } from 'draft-js';
 
 export function copy(text) {
+  console.log(text);
   const el = document.createElement('textarea');
   el.setAttribute('id', 'copier');
   el.value = text;
   document.body.appendChild(el); 
   el.select();
-  document.execCommand('copy');
-  document.body.removeChild(el);
+
+  // if(document.execCommand('copy')) {
+  //   document.body.removeChild(el);
+  //   return true;
+  // }
+
+  // return false;
 }
 
 export function truncate(str, length = 20, append = '...') {

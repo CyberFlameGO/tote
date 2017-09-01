@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import { string, shape, array, func, bool } from 'prop-types';
 import { Editor as DraftEditor, ContentState, EditorState, CompositeDecorator } from 'draft-js';
+import MultiDecorator from 'draft-js-multidecorators';
 import * as strats from './strats';
 import * as comps from './comps';
-import MultiDecorator from 'draft-js-multidecorators';
 import prismjs from './prism';
 import checkReturnForState from './utils/checkReturnForState';
 import checkCharacterForState from './utils/checkCharacterForState';
-import { stateToMarkdown } from 'draft-js-export-markdown';
-import { copy, fromRaw } from '../../utils/helpers';
+import { fromRaw } from '../../utils/helpers';
 
 export default class Editor extends Component {
   static propTypes = {
@@ -29,8 +28,6 @@ export default class Editor extends Component {
     this.onChange = this.onChange.bind(this);
     this.handleBeforeInput = this.handleBeforeInput.bind(this);
     this.handleReturn = this.handleReturn.bind(this);
-    this.handleKeyDown = this.handleKeyDown.bind(this);
-    this.handleKeyUp = this.handleKeyUp.bind(this);
 
     this.compositeDecorator = new MultiDecorator([
       prismjs,
@@ -91,19 +88,6 @@ export default class Editor extends Component {
     return 'not-handled';
   }
 
-  handleKeyDown(e) {
-    if (e.which === 91) this.setState({ ctrl: true });
-    if (e.which === 67 && this.state.ctrl) {
-      e.preventDefault();
-      const text = stateToMarkdown(this.state.editorState.getCurrentContent());
-      copy(text);
-    }
-  }
-
-  handleKeyUp(e) {
-    if (e.which === 91) this.setState({ ctrl: false });
-  }
-
   onFocus() {
     console.log('Focus!');
   }
@@ -112,11 +96,7 @@ export default class Editor extends Component {
     const { editorState } = this.state;
     const { onFocus, readOnly } = this.props;
     return (
-      <div
-        style={{ height: '100%' }}
-        onKeyDown={this.handleKeyDown}
-        onKeyUp={this.handleKeyUp}
-      >
+      <div style={{ height: '100%' }}>
         <DraftEditor
           handleBeforeInput={this.handleBeforeInput}
           handleReturn={this.handleReturn}

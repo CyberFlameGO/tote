@@ -8,6 +8,8 @@ import deleteNote from '../../utils/deleteNote';
 import Icon from '../../utils/icons';
 import './Note.scss';
 import { copy } from '../../utils/helpers';
+import { stateToMarkdown } from 'draft-js-export-markdown';
+import copyToClipboard from 'copy-text-to-clipboard';
 
 export default class Note extends Component {
   static propTypes = {
@@ -30,6 +32,7 @@ export default class Note extends Component {
     this.delete = this.delete.bind(this);
     this.focus = this.focus.bind(this);
     this.share = this.share.bind(this);
+    this.copy = this.copy.bind(this);
     this.onFocus = this.onFocus.bind(this);
     this.togglePrivate = this.togglePrivate.bind(this);
   }
@@ -62,7 +65,7 @@ export default class Note extends Component {
     const { user, match } = this.props;
     const site = window.location.origin;
     const link = `${site}/u/${user.uid}/${match.params.noteId}`;
-    copy(link);
+    copyToClipboard(link);
   }
 
   onFocus() {
@@ -81,6 +84,16 @@ export default class Note extends Component {
   togglePrivate() {
     const { isPrivate } = this.props;
     this.save(this.editor.state.editorState, !isPrivate);
+  }
+
+  copy(event) {
+    const text = stateToMarkdown(this.editor.state.editorState.getCurrentContent());
+    const copied = copyToClipboard('This here is an example!')
+    if (copied) {
+      event.preventDefault();
+    } else {
+      console.warn('Copy markdown failed');
+    }
   }
 
   render() {
@@ -104,7 +117,7 @@ export default class Note extends Component {
             <Icon icon="sync" />
           </button>}
         </div>
-        <div className="note__editor">
+        <div className="note__editor" onCopy={this.copy}>
           {loading && online ? <span className="note__editor__loading">Loading...</span> :
             <Editor
               key={noteId}
